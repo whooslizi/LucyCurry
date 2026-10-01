@@ -97,9 +97,16 @@ export default function DailySummary({ onNextDay }: Props) {
               <div style={{ fontSize: '24px', margin: '20px 0' }}>
                 Số dư hiện tại: <strong style={{ color: '#d84315' }}>{formatMoney(state.money)}</strong>
               </div>
-              <button onClick={handleNext} style={{ width: '100%', background: '#ff9800', fontSize: '28px', padding: '20px', fontWeight: 'bold', border: '4px solid #5d4037' }}>
-                SANG NGÀY TIẾP THEO
-              </button>
+              
+              {state.day >= 7 ? (
+                <button onClick={handleNext} style={{ width: '100%', background: '#d32f2f', color: '#fff', fontSize: '28px', padding: '20px', fontWeight: 'bold', border: '4px solid #000' }}>
+                  XEM KẾT CỤC KINH DOANH
+                </button>
+              ) : (
+                <button onClick={handleNext} style={{ width: '100%', background: '#ff9800', fontSize: '28px', padding: '20px', fontWeight: 'bold', border: '4px solid #5d4037' }}>
+                  SANG NGÀY TIẾP THEO
+                </button>
+              )}
             </div>
           )}
         </div>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import ShopScene from './ShopScene'
 import DailySummary from './DailySummary'
 import StoryScreen from './StoryScreen'
+import EndingScreen from './EndingScreen'
 import { GameProvider, useGameState } from '../game/gameState'
 
 // Internal component that uses context
@@ -12,6 +13,11 @@ function GameContent() {
   // If player hasn't entered name, show story
   if (!state.playerName) {
     return <StoryScreen onComplete={() => {}} />;
+  }
+
+  // If game is finished (day > 7)
+  if (state.day > 7) {
+    return <EndingScreen />;
   }
 
   return (
