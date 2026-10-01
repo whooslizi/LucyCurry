@@ -313,7 +313,7 @@ export default function ShopScene({ onEndDay }: Props) {
   };
 
   return (
-    <div className="portrait-container" style={{ display: 'flex', flexDirection: 'column', background: '#3e2723' }}>
+    <div className="portrait-container" style={{ display: 'flex', flexDirection: 'column', height: '100dvh', maxHeight: '100dvh', overflow: 'hidden', background: '#3e2723' }}>
       {showRecipe && <RecipeModal onClose={() => setShowRecipe(false)} />}
       {isDelivering && deliveringOrder && <DeliveryMinigame orderInfo={`Đơn #${deliveringOrder.id}`} onComplete={handleDeliveryComplete} />}
       
@@ -524,7 +524,7 @@ export default function ShopScene({ onEndDay }: Props) {
       </div>
 
       {/* Bottom UI Panel */}
-      <div style={{ flex: 1, background: '#f5e6cc', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ flex: 1, minHeight: 0, background: '#f5e6cc', display: 'flex', flexDirection: 'column' }}>
         <div style={{ flex: 1, overflowY: 'auto', padding: '10px' }}>
           
           <div style={{ fontSize: '22px', color: '#d84315', marginBottom: '8px', fontWeight: 'bold' }}>Kho nguyên liệu · Bấm để mua</div>
