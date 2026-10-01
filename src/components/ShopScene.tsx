@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useGameState } from '../game/gameState';
 import { Order } from '../types/game';
 import RecipeModal from './RecipeModal';
@@ -20,6 +20,12 @@ export default function ShopScene({ onEndDay }: Props) {
   
   const [shippingModalOrder, setShippingModalOrder] = useState<Order | null>(null);
   const [showPhone, setShowPhone] = useState(false);
+  const [buyModalItem, setBuyModalItem] = useState<{ name: string, price: number, img: string } | null>(null);
+  const [buyModalQty, setBuyModalQty] = useState(1);
+  const [silentMode, setSilentMode] = useState(false);
+  const silentModeRef = useRef(silentMode);
+  useEffect(() => { silentModeRef.current = silentMode; }, [silentMode]);
+  const [toastMsg, setToastMsg] = useState('');
   const [quotingOrders, setQuotingOrders] = useState<Record<string, 'quoting' | 'paid' | 'nhay'>>({});
 
   // Shop status
@@ -115,8 +121,25 @@ export default function ShopScene({ onEndDay }: Props) {
           } as Order
         });
 
-        playSound('notification');
-        setShowPhone(true);
+        if (!silentModeRef.current) {
+          playSound('notification');
+          setShowPhone(true);
+        }
+      }
+
+      // Đồ ăn nguội (Food spoils)
+      if (Math.random() < 0.05) {
+        setCookedDishes(prev => {
+          const keys = Object.keys(prev).filter(k => prev[k] > 0);
+          if (keys.length > 0) {
+            const victim = keys[Math.floor(Math.random() * keys.length)];
+            dispatch({ type: 'ADD_EXPENSE', payload: 5000 });
+            playSound('error');
+            setToastMsg(`Phần ${victim} bị nguội, tốn 5,000đ tiền điện hâm lại!`);
+            setTimeout(() => setToastMsg(''), 4000);
+          }
+          return prev;
+        });
       }
 
       // Random Event
@@ -185,10 +208,7 @@ export default function ShopScene({ onEndDay }: Props) {
     return () => clearInterval(interval);
   }, [isCooking, cookingProgress, selectedDishes]);
 
-  const buyIngredient = (item: string, cost: number) => {
-    playSound('cash');
-    dispatch({ type: 'BUY_INGREDIENT', payload: { item, cost } });
-  };
+
 
   const handleDishChange = (dishName: string, delta: number, req: Record<string, number>) => {
     const current = selectedDishes[dishName] || 0;
@@ -329,6 +349,53 @@ export default function ShopScene({ onEndDay }: Props) {
   return (
     <div className="portrait-container" style={{ display: 'flex', flexDirection: 'column', height: '100dvh', maxHeight: '100dvh', overflow: 'hidden', background: '#3e2723' }}>
       {showRecipe && <RecipeModal onClose={() => setShowRecipe(false)} />}
+      {toastMsg && (
+        <div style={{ position: 'absolute', top: '80px', left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.8)', color: '#fff', padding: '10px 20px', borderRadius: '20px', fontSize: '18px', zIndex: 999, whiteSpace: 'nowrap' }}>
+          {toastMsg}
+        </div>
+      )}
+      
+      {buyModalItem && (
+        <div className="modal-backdrop" style={{ zIndex: 110 }}>
+          <div className="modal-content" style={{ background: '#e0c097', border: '6px solid #8d6e63', textAlign: 'center', color: '#3e2723' }}>
+            <h2 style={{ fontSize: '28px', color: '#d84315', marginTop: 0 }}>NHẬP SỈ: {buyModalItem.name.toUpperCase()}</h2>
+            <img src={buyModalItem.img} style={{ width: '64px', height: '64px', imageRendering: 'pixelated', marginBottom: '10px' }} />
+            <p style={{ fontSize: '20px', margin: 0 }}>Giá nhập: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(buyModalItem.price)} / phần</p>
+            
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '20px 0' }}>
+              <button onClick={() => setBuyModalQty(Math.max(1, buyModalQty - 1))} style={{ background: '#e53935', fontSize: '32px', width: '60px', height: '60px', borderRadius: '10px', border: '4px solid #000', color: '#fff' }}>-</button>
+              <div style={{ fontSize: '36px', width: '80px', textAlign: 'center', fontWeight: 'bold' }}>{buyModalQty}</div>
+              <button onClick={() => setBuyModalQty(buyModalQty + 1)} style={{ background: '#4caf50', fontSize: '32px', width: '60px', height: '60px', borderRadius: '10px', border: '4px solid #000', color: '#fff' }}>+</button>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
+              <button onClick={() => setBuyModalQty(Math.max(1, buyModalQty - 5))} style={{ background: '#9e9e9e', fontSize: '18px', padding: '10px', color: '#fff', fontWeight: 'bold', border: '2px solid #000' }}>-5</button>
+              <button onClick={() => setBuyModalQty(buyModalQty + 5)} style={{ background: '#9e9e9e', fontSize: '18px', padding: '10px', color: '#fff', fontWeight: 'bold', border: '2px solid #000' }}>+5</button>
+              <button onClick={() => setBuyModalQty(buyModalQty + 10)} style={{ background: '#9e9e9e', fontSize: '18px', padding: '10px', color: '#fff', fontWeight: 'bold', border: '2px solid #000' }}>+10</button>
+            </div>
+            
+            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#d84315', marginBottom: '20px', background: '#fff', padding: '10px', border: '2px dashed #d84315' }}>
+              TỔNG CỘNG: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(buyModalItem.price * buyModalQty)}
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button onClick={() => {
+                if (state.money >= buyModalItem.price * buyModalQty) {
+                  playSound('cash');
+                  for(let i=0; i<buyModalQty; i++) {
+                    dispatch({ type: 'BUY_INGREDIENT', payload: { item: buyModalItem.name, cost: buyModalItem.price } });
+                  }
+                  setBuyModalItem(null);
+                } else {
+                  playSound('error');
+                  alert('Không đủ tiền!');
+                }
+              }} style={{ flex: 1, background: '#4caf50', fontSize: '24px', padding: '15px', color: '#fff', border: '3px solid #000' }}>CHỐT SỈ</button>
+              <button onClick={() => setBuyModalItem(null)} style={{ flex: 1, background: '#757575', fontSize: '24px', padding: '15px', color: '#fff', border: '3px solid #000' }}>HỦY</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {isDelivering && deliveringOrder && <DeliveryMinigame orderInfo={`Đơn #${deliveringOrder.id}`} onComplete={handleDeliveryComplete} />}
       
       {/* Event Modal */}
@@ -349,7 +416,12 @@ export default function ShopScene({ onEndDay }: Props) {
       {showPhone && (
         <div className="modal-backdrop" onClick={() => setShowPhone(false)}>
           <div className="modal-content" onClick={e => e.stopPropagation()} style={{ width: '90%', height: '80%', background: '#fff', border: '6px solid #000', borderRadius: '25px', padding: '10px', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ textAlign: 'center', background: '#e0e0e0', padding: '15px', borderRadius: '15px 15px 0 0', fontWeight: 'bold', fontSize: '28px', color: '#000' }}>CàriChat</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#e0e0e0', padding: '15px', borderRadius: '15px 15px 0 0', fontWeight: 'bold', fontSize: '28px', color: '#000' }}>
+              <span>CàriChat</span>
+              <button onClick={() => setSilentMode(!silentMode)} style={{ background: silentMode ? '#f44336' : '#9e9e9e', color: '#fff', fontSize: '16px', padding: '5px 10px', borderRadius: '8px', border: 'none', fontWeight: 'bold' }}>
+                {silentMode ? '🔕 IM LẶNG' : '🔔 ĐỔ CHUÔNG'}
+              </button>
+            </div>
             <div style={{ flex: 1, overflowY: 'auto', padding: '15px', background: '#f5f5f5' }}>
               {state.phoneOrders.length === 0 && <div style={{ textAlign: 'center', color: '#999', marginTop: '50px', fontSize: '20px' }}>Không có tin nhắn nào.</div>}
               {state.phoneOrders.map(order => {
@@ -569,7 +641,7 @@ export default function ShopScene({ onEndDay }: Props) {
           <div style={{ fontSize: '22px', color: '#d84315', marginBottom: '8px', fontWeight: 'bold' }}>Kho nguyên liệu · Bấm để mua</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '15px' }}>
              {INGREDIENTS.map(item => (
-              <div key={item.name} onClick={() => buyIngredient(item.name, item.price)} style={{ 
+              <div key={item.name} onClick={() => { setBuyModalItem(item); setBuyModalQty(1); }} style={{ 
                 background: '#fff', border: '3px solid #8d6e63', padding: '5px', 
                 textAlign: 'center', cursor: 'pointer', borderRadius: '8px', position: 'relative',
                 boxShadow: '2px 2px 0 #d7ccc8', display: 'flex', flexDirection: 'column', alignItems: 'center'
