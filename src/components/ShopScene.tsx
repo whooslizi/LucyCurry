@@ -582,11 +582,19 @@ export default function ShopScene({ onEndDay }: Props) {
               );
             })}
           </div>
+        </div>
 
+        {/* Sticky Cook Button */}
+        <div style={{ padding: '10px', background: '#e0c097', borderTop: '4px solid #8d6e63' }}>
           <button 
             onClick={startCooking} 
             disabled={isCooking || Object.values(selectedDishes).reduce((a,b)=>a+b,0) === 0}
-            style={{ width: '100%', background: '#ff9800', marginTop: '15px', padding: '15px', fontSize: '24px', border: '3px solid #3e2723', fontWeight: 'bold', borderRadius: '10px', color: '#000' }}
+            style={{ 
+              width: '100%', background: isCooking ? '#9e9e9e' : '#ff9800', padding: '15px', 
+              fontSize: '24px', border: '3px solid #3e2723', fontWeight: 'bold', 
+              borderRadius: '10px', color: '#000', cursor: isCooking ? 'not-allowed' : 'pointer',
+              boxShadow: '0 4px 0 #3e2723'
+            }}
           >
             {isCooking ? `ĐANG NẤU... ${cookingProgress}%` : 'BẬT BẾP NẤU MÓN ĐÃ CHỌN'}
           </button>
