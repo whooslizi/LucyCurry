@@ -434,45 +434,76 @@ export default function ShopScene({ onEndDay }: Props) {
       )}
 
       {/* Header */}
-      <div style={{ background: '#1a0f0d', color: '#ffb300', display: 'flex', justifyContent: 'space-between', padding: '10px 15px', borderBottom: '2px solid #000', fontSize: '24px' }}>
+      <div style={{ background: '#1a0f0d', color: '#ffb300', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 15px', borderBottom: '2px solid #000', fontSize: '24px' }}>
         <div>
           <span>Ngày {state.day} </span><br/>
           <span style={{ color: '#4caf50' }}>{formatMoney(state.money)}</span>
         </div>
         <div style={{ textAlign: 'right' }}>
           <span>{formatTime(state.timeMinutes)}</span><br/>
-          <button onClick={() => setShowRecipe(true)} style={{ background: 'transparent', padding: 0, border: 'none', color: '#fff', fontSize: '20px', textDecoration: 'underline' }}>
-            Sổ công thức
-          </button>
+          <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '5px' }}>
+            <button onClick={() => setShowRecipe(true)} style={{ background: 'transparent', padding: 0, border: 'none', color: '#fff', fontSize: '18px', textDecoration: 'underline' }}>
+              Sổ công thức
+            </button>
+            <button onClick={() => window.location.reload()} style={{ background: '#d32f2f', padding: '2px 8px', border: '2px solid #fff', color: '#fff', fontSize: '16px', fontWeight: 'bold', borderRadius: '5px' }}>
+              THOÁT
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Top Scene: Cozy Kitchen */}
       <div style={{ 
-        height: '240px', background: 'linear-gradient(to bottom, #5d4037 0%, #3e2723 80%, #795548 80%, #5d4037 100%)', 
+        minHeight: '340px', flexShrink: 0, background: 'linear-gradient(to bottom, #5d4037 0%, #3e2723 80%, #795548 80%, #5d4037 100%)', 
         position: 'relative', overflow: 'hidden', borderBottom: '6px solid #1a0f0d'
       }}>
         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '80%', backgroundImage: 'url(/images/brick.svg)', opacity: 0.3 }}></div>
         
-        <img src="/images/window.svg" style={{ position: 'absolute', top: '15px', left: '20px', width: '80px', boxShadow: '2px 2px 10px #000' }} />
-        <img src="/images/wood.svg" style={{ position: 'absolute', bottom: '15px', left: '15px', width: '80px' }} />
+        <img src="/images/window.svg" style={{ position: 'absolute', top: '15px', left: '20px', width: '90px', boxShadow: '2px 2px 10px #000' }} />
+        <img src="/images/wood.svg" style={{ position: 'absolute', bottom: '15px', left: '15px', width: '100px' }} />
         
-        <div style={{ position: 'absolute', bottom: '20px', left: '120px', width: '100px' }}>
-          {isCooking && <div style={{ color: '#ffb300', fontSize: '18px', marginBottom: '5px', fontWeight: 'bold', background: '#000', padding: '2px 8px', borderRadius: '10px', textAlign: 'center' }}>ĐANG NẤU</div>}
+        <div style={{ position: 'absolute', bottom: '20px', left: '130px', width: '120px' }}>
+          {isCooking && <div style={{ color: '#ffb300', fontSize: '20px', marginBottom: '5px', fontWeight: 'bold', background: '#000', padding: '2px 8px', borderRadius: '10px', textAlign: 'center' }}>ĐANG NẤU</div>}
           <img src="/images/stove.svg" style={{ width: '100%' }} />
         </div>
         
-        <img src="/images/lucy_8bit.svg" style={{ position: 'absolute', bottom: '20px', right: '110px', width: '90px', imageRendering: 'pixelated' }} />
+        <img src="/images/lucy_8bit.svg" style={{ position: 'absolute', bottom: '20px', right: '120px', width: '100px', imageRendering: 'pixelated' }} />
 
         {/* CàriChat Phone Button */}
         <div 
           onClick={() => setShowPhone(true)}
-          style={{ position: 'absolute', bottom: '20px', right: '15px', background: state.phoneOrders.length > 0 ? '#f44336' : '#2196f3', width: '70px', height: '110px', borderRadius: '10px', border: '4px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '4px 4px 0 rgba(0,0,0,0.5)', animation: state.phoneOrders.length > 0 ? 'shake 0.5s infinite' : 'none' }}
+          style={{ position: 'absolute', bottom: '20px', right: '15px', background: state.phoneOrders.length > 0 ? '#f44336' : '#2196f3', width: '80px', height: '120px', borderRadius: '10px', border: '4px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '4px 4px 0 rgba(0,0,0,0.5)', animation: state.phoneOrders.length > 0 ? 'shake 0.5s infinite' : 'none', zIndex: 10 }}
         >
-          <div style={{ color: '#fff', fontSize: '20px', fontWeight: 'bold', textAlign: 'center' }}>
+          <div style={{ color: '#fff', fontSize: '22px', fontWeight: 'bold', textAlign: 'center' }}>
             CHAT
-            {state.phoneOrders.length > 0 && <div style={{ background: '#fff', color: '#f44336', borderRadius: '50%', width: '30px', height: '30px', margin: '5px auto 0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{state.phoneOrders.length}</div>}
+            {state.phoneOrders.length > 0 && <div style={{ background: '#fff', color: '#f44336', borderRadius: '50%', width: '35px', height: '35px', margin: '5px auto 0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{state.phoneOrders.length}</div>}
           </div>
+        </div>
+
+        {/* Floating Transparent Sticky Notes */}
+        <div style={{ position: 'absolute', top: '15px', right: '15px', left: '130px', display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '10px', zIndex: 5 }}>
+          {state.activeOrders.map(order => (
+            <div 
+              key={order.id} 
+              onClick={() => initiatePacking(order)}
+              style={{ 
+                background: 'rgba(255, 249, 196, 0.85)', /* Transparent yellow note */
+                border: '2px dashed rgba(245, 127, 23, 0.8)', 
+                padding: '10px', 
+                borderRadius: '5px', 
+                minWidth: '160px', 
+                boxShadow: '2px 2px 5px rgba(0,0,0,0.3)',
+                cursor: 'pointer',
+                backdropFilter: 'blur(2px)'
+              }}
+            >
+              <div style={{ fontSize: '22px', color: '#000', fontWeight: 'bold', marginBottom: '5px', borderBottom: '1px solid rgba(0,0,0,0.2)' }}>#{order.id}</div>
+              <div style={{ fontSize: '18px', color: '#d84315', fontWeight: 'bold' }}>
+                {order.items.map((it, i) => <div key={i}>- {it.quantity}x {it.name}</div>)}
+              </div>
+              <div style={{ textAlign: 'center', marginTop: '5px', fontSize: '14px', color: '#000', fontWeight: 'bold', background: 'rgba(255,255,255,0.5)', borderRadius: '3px' }}>Bấm để đóng gói</div>
+            </div>
+          ))}
         </div>
 
         <style>{`
@@ -486,23 +517,10 @@ export default function ShopScene({ onEndDay }: Props) {
         `}</style>
 
         {!isShopOpen && (
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <button onClick={() => setIsShopOpen(true)} style={{ background: '#d84315', fontSize: '28px', padding: '20px 40px', border: '4px solid #fff', borderRadius: '10px', fontWeight: 'bold', color: '#fff' }}>MỞ CỬA BÁN!</button>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 20 }}>
+            <button onClick={() => setIsShopOpen(true)} style={{ background: '#d84315', fontSize: '32px', padding: '20px 40px', border: '4px solid #fff', borderRadius: '10px', fontWeight: 'bold', color: '#fff' }}>MỞ CỬA BÁN!</button>
           </div>
         )}
-      </div>
-
-      {/* Active Orders Horizontal Bar - Replaced with NOTE UI */}
-      <div style={{ background: '#fff9c4', padding: '15px', display: 'flex', gap: '15px', overflowX: 'auto', borderBottom: '4px solid #fbc02d', borderTop: '4px solid #fbc02d' }}>
-        <div style={{ color: '#f57f17', fontWeight: 'bold', fontSize: '24px', alignSelf: 'center', whiteSpace: 'nowrap' }}>Sổ Note:</div>
-        {state.activeOrders.length === 0 && <div style={{ color: '#999', alignSelf: 'center', fontSize: '20px' }}>Chưa nhận đơn nào</div>}
-        {state.activeOrders.map(order => (
-          <div key={order.id} style={{ background: '#fff', border: '2px dashed #fbc02d', padding: '10px', borderRadius: '5px', minWidth: '180px', boxShadow: '2px 2px 0 rgba(0,0,0,0.1)' }}>
-            <strong style={{ fontSize: '22px', color: '#000' }}>#{order.id}</strong><br/>
-            <div style={{ fontSize: '18px', color: '#d84315', fontWeight: 'bold' }}>{order.items.map(it => `${it.quantity}x ${it.name}`).join(', ')}</div>
-            <button onClick={() => initiatePacking(order)} style={{ background: '#ff9800', border: '2px solid #000', color: '#000', padding: '8px', width: '100%', marginTop: '10px', fontWeight: 'bold', fontSize: '20px', cursor: 'pointer' }}>ĐÓNG GÓI</button>
-          </div>
-        ))}
       </div>
 
       {/* Bottom UI Panel */}
