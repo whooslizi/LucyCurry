@@ -45,6 +45,9 @@ const gameReducer = (state: GameState, action: Action): GameState => {
       if (!order) return state;
       return {
         ...state,
+        money: state.money + order.totalPrice,
+        revenueToday: state.revenueToday + order.totalPrice,
+        profitToday: state.profitToday + order.totalPrice,
         phoneOrders: state.phoneOrders.filter(o => o.id !== action.payload),
         activeOrders: [...state.activeOrders, { ...order, status: 'accepted' }]
       };
@@ -60,9 +63,6 @@ const gameReducer = (state: GameState, action: Action): GameState => {
       return {
         ...state,
         activeOrders: state.activeOrders.filter(o => o.id !== action.payload.id),
-        money: state.money + action.payload.totalPrice,
-        revenueToday: state.revenueToday + action.payload.totalPrice,
-        profitToday: state.profitToday + action.payload.totalPrice,
         completedOrdersToday: state.completedOrdersToday + 1
       };
     case 'ADD_EXPENSE':

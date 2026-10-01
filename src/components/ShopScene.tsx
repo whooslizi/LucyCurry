@@ -20,6 +20,7 @@ export default function ShopScene({ onEndDay }: Props) {
   
   const [shippingModalOrder, setShippingModalOrder] = useState<Order | null>(null);
   const [showPhone, setShowPhone] = useState(false);
+  const [quotingOrders, setQuotingOrders] = useState<Record<string, 'quoting' | 'paid' | 'nhay'>>({});
 
   // Shop status
   const [isShopOpen, setIsShopOpen] = useState(false);
@@ -248,6 +249,19 @@ export default function ShopScene({ onEndDay }: Props) {
     }
   };
 
+  const handleQuote = (order: Order) => {
+    setQuotingOrders(prev => ({ ...prev, [order.id]: 'quoting' }));
+    setTimeout(() => {
+      if (Math.random() < 0.2) { // 20% khách nhây
+        playSound('error');
+        setQuotingOrders(prev => ({ ...prev, [order.id]: 'nhay' }));
+      } else {
+        playSound('cash');
+        setQuotingOrders(prev => ({ ...prev, [order.id]: 'paid' }));
+      }
+    }, 1500);
+  };
+
   const confirmPacking = () => {
     if (!packingModalOrder) return;
     
@@ -264,7 +278,7 @@ export default function ShopScene({ onEndDay }: Props) {
     }
 
     if (isCorrect) {
-      playSound('cash');
+      playSound('notification');
       setShippingModalOrder(packingModalOrder);
       setPackingModalOrder(null);
     } else {
@@ -338,19 +352,43 @@ export default function ShopScene({ onEndDay }: Props) {
             <div style={{ textAlign: 'center', background: '#e0e0e0', padding: '15px', borderRadius: '15px 15px 0 0', fontWeight: 'bold', fontSize: '28px', color: '#000' }}>CàriChat</div>
             <div style={{ flex: 1, overflowY: 'auto', padding: '15px', background: '#f5f5f5' }}>
               {state.phoneOrders.length === 0 && <div style={{ textAlign: 'center', color: '#999', marginTop: '50px', fontSize: '20px' }}>Không có tin nhắn nào.</div>}
-              {state.phoneOrders.map(order => (
+              {state.phoneOrders.map(order => {
+                const qStatus = quotingOrders[order.id];
+                return (
                 <div key={order.id} style={{ background: '#e3f2fd', color: '#000', padding: '15px', borderRadius: '15px', marginBottom: '15px', fontSize: '22px', boxShadow: '2px 2px 5px rgba(0,0,0,0.2)' }}>
                   <strong>{order.customerName}:</strong>
                   <div style={{ marginTop: '5px' }}>Chị ơi cho em đơn:</div>
                   <ul style={{ margin: '10px 0', paddingLeft: '25px', fontWeight: 'bold', color: '#d84315' }}>
                     {order.items.map((it, i) => <li key={i}>{it.quantity} x {it.name}</li>)}
                   </ul>
-                  <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
-                    <button onClick={() => dispatch({ type: 'ACCEPT_ORDER', payload: order.id })} style={{ flex: 1, background: '#4caf50', padding: '12px', color: '#fff', fontWeight: 'bold', border: '2px solid #000' }}>NHẬN ĐƠN</button>
-                    <button onClick={() => dispatch({ type: 'REJECT_ORDER', payload: order.id })} style={{ flex: 1, background: '#f44336', padding: '12px', color: '#fff', fontWeight: 'bold', border: '2px solid #000' }}>TỪ CHỐI</button>
-                  </div>
+
+                  {qStatus === 'quoting' && <div style={{ color: '#999', fontStyle: 'italic', marginTop: '10px' }}>Bạn: Tổng là {formatMoney(order.totalPrice)} em nhé.<br/>Khách đang thao tác...</div>}
+                  
+                  {qStatus === 'nhay' && (
+                    <div style={{ color: '#d32f2f', fontWeight: 'bold', marginTop: '10px' }}>
+                      Khách: Dạ thôi mắc quá em hong mua nữa đâu chị!<br/>
+                      <button onClick={() => dispatch({ type: 'REJECT_ORDER', payload: order.id })} style={{ background: '#f44336', padding: '10px', color: '#fff', border: '2px solid #000', marginTop: '10px', width: '100%' }}>ĐÓNG</button>
+                    </div>
+                  )}
+
+                  {qStatus === 'paid' && (
+                    <div style={{ marginTop: '10px' }}>
+                      <div style={{ color: '#3e2723' }}>Khách: Em chuyển rồi nha chị yêu!</div>
+                      <div style={{ background: '#4caf50', color: '#fff', padding: '8px', borderRadius: '5px', marginTop: '10px', fontSize: '18px', fontWeight: 'bold' }}>
+                        🔔 CàriBank: +{formatMoney(order.totalPrice)}
+                      </div>
+                      <button onClick={() => dispatch({ type: 'ACCEPT_ORDER', payload: order.id })} style={{ width: '100%', background: '#ff9800', padding: '12px', color: '#000', fontWeight: 'bold', border: '2px solid #000', marginTop: '15px' }}>NHẬN ĐƠN NẤU LUÔN</button>
+                    </div>
+                  )}
+
+                  {!qStatus && (
+                    <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
+                      <button onClick={() => handleQuote(order)} style={{ flex: 1, background: '#2196f3', padding: '12px', color: '#fff', fontWeight: 'bold', border: '2px solid #000' }}>BÁO GIÁ: {formatMoney(order.totalPrice)}</button>
+                      <button onClick={() => dispatch({ type: 'REJECT_ORDER', payload: order.id })} style={{ flex: 1, background: '#f44336', padding: '12px', color: '#fff', fontWeight: 'bold', border: '2px solid #000' }}>TỪ CHỐI</button>
+                    </div>
+                  )}
                 </div>
-              ))}
+              )})}
             </div>
             <button onClick={() => setShowPhone(false)} style={{ background: '#000', color: '#fff', padding: '15px', borderRadius: '0 0 15px 15px', fontSize: '24px', fontWeight: 'bold' }}>ĐÓNG ĐIỆN THOẠI</button>
           </div>
