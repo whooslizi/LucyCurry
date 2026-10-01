@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+  --primary: #d84315;
+  --secondary: #bf360c;
+  --bg-color: #000;
+  --panel-bg: #4e342e;
+  --text-color: #fff;
+  --border-radius: 4px;
+  --accent: #ffb300;
+}
+
+body {
+  margin: 0;
+  font-family: 'VT323', monospace;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
+  height: 100vh;
+  overflow: hidden;
+  font-size: 24px;
+}
+
+button {
+  background-color: var(--primary);
+  color: white;
+  border: 4px solid #000;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  font-weight: bold;
+  font-family: 'VT323', monospace;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.1s;
+  text-transform: uppercase;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+button:disabled {
+  background-color: #795548;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Modal styling */
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #3e2723;
+  border: 4px solid #5d4037;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Portrait Layout for start screen & game container */
+.portrait-container {
+  width: 100%;
+  max-width: 450px;
+  height: 100vh;
+  margin: 0 auto;
+  background: #2d1815;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0,0,0,0.8);
+}
+
+/* Start screen buttons (stack) */
+.start-btn { width: 80%; margin: 10px auto; padding: 15px; border-radius: 8px; box-shadow: 0 4px 0 #000; }
+.btn-green { background: #2e7d32; }
+.btn-yellow { background: #fbc02d; color: #000; }
+.btn-red { background: #c62828; }
+.btn-grey { background: #757575; }
+
+/* Two panel layout inside portrait (Top/Bottom now instead of Left/Right for mobile pixel feel) */
+.game-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.top-panel {
+  flex: 3;
+  background: #3e2723;
+  border-bottom: 4px solid #000;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bottom-panel {
+  flex: 2;
+  background: #2d1815;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  background: #1a0f0d;
+  padding: 5px 10px;
+  border-bottom: 2px solid #000;
+  font-size: 20px;
+  align-items: center;
+}
+
+.chat-bubble {
+  background: #4e342e;
+  padding: 10px;
+  border-radius: 8px;
+  margin: 5px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: 2px solid #000;
+  font-size: 20px;
+}
+
+/* Kitchen UI */
+.ingredient-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.ingredient-btn {
+  background: #4e342e;
+  border: 2px solid #000;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+.pot-row {
+  display: flex;
+  justify-content: space-around;
+}
+
+.pot-btn {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 16px;
+  padding: 0;
+}
+
+.active-station {
+  flex: 1;
+  background: #4e342e;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #000;
+  margin: 10px 0;
+}
