@@ -82,7 +82,7 @@ export default function ShopScene({ onEndDay }: Props) {
         return;
       }
       
-      dispatch({ type: 'ADVANCE_TIME', payload: 2 });
+      dispatch({ type: 'ADVANCE_TIME', payload: 3 });
       
       // Random customer messages (Phone)
       if (Math.random() < 0.1 && state.phoneOrders.length < 5) {
@@ -478,8 +478,9 @@ export default function ShopScene({ onEndDay }: Props) {
           <span style={{ color: '#4caf50' }}>{formatMoney(state.money)}</span>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <span>{formatTime(state.timeMinutes)}</span><br/>
-          <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '5px' }}>
+          <div style={{ fontSize: '32px', fontWeight: 'bold', lineHeight: '1' }}>{formatTime(state.timeMinutes)}</div>
+          <div style={{ color: '#f44336', fontSize: '18px', fontWeight: 'bold', margin: '5px 0' }}>CÒN LẠI: {Math.floor((state.closingMinutes - state.timeMinutes) / 60)}h {(state.closingMinutes - state.timeMinutes) % 60}m</div>
+          <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
             <button onClick={() => setShowRecipe(true)} style={{ background: 'transparent', padding: 0, border: 'none', color: '#fff', fontSize: '18px', textDecoration: 'underline' }}>
               Sổ công thức
             </button>

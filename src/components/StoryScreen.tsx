@@ -13,9 +13,9 @@ export default function StoryScreen({ onComplete }: Props) {
   const handleNext = () => {
     if (step === 2) {
       if (!nameInput.trim()) return;
-      dispatch({ type: 'SET_PLAYER_NAME', payload: nameInput.trim() });
       setStep(3);
     } else if (step === 3) {
+      dispatch({ type: 'SET_PLAYER_NAME', payload: nameInput.trim() });
       onComplete();
     } else {
       setStep(s => s + 1);
@@ -73,7 +73,7 @@ export default function StoryScreen({ onComplete }: Props) {
                 type="text" 
                 value={nameInput}
                 onChange={e => setNameInput(e.target.value)}
-                style={{ background: '#fff', border: '2px solid #5d4037', padding: '10px', fontSize: '24px', fontFamily: 'VT323', marginTop: '10px', width: '90%' }}
+                style={{ background: '#fff', color: '#000', border: '2px solid #5d4037', padding: '10px', fontSize: '24px', fontFamily: 'VT323', marginTop: '10px', width: '90%' }}
                 placeholder="NHẬP TÊN..."
                 autoFocus
               />

@@ -12,6 +12,7 @@ export default function StartScreen({ onStart, onShowDisclaimer }: Props) {
   const resetProgress = () => {
     if (confirm('Bạn có chắc chắn muốn xóa toàn bộ tiến trình không?')) {
       localStorage.removeItem('lucyCurry_disclaimerAccepted');
+      localStorage.removeItem('lucy_save_v1');
       window.location.reload();
     }
   };
