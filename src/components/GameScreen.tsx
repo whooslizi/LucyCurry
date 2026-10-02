@@ -11,12 +11,12 @@ function GameContent() {
   const { state } = useGameState();
   const [isDayOver, setIsDayOver] = useState(false);
 
+  const [showTutorial, setShowTutorial] = useState(() => !localStorage.getItem('lucyCurry_tutorialRead'));
+
   // If player hasn't entered name, show story
   if (!state.playerName) {
     return <StoryScreen onComplete={() => {}} />;
   }
-
-  const [showTutorial, setShowTutorial] = useState(() => !localStorage.getItem('lucyCurry_tutorialRead'));
 
   if (showTutorial && state.playerName) {
     return <TutorialScreen onClose={() => {

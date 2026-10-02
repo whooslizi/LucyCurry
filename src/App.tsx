@@ -42,6 +42,8 @@ function App() {
   return (
     <>
       {screen !== 'game' && <audio src="/sounds/yassss.mp3" loop autoPlay />}
+      {screen === 'game' && <audio src="/sounds/bgm.wav" loop autoPlay />}
+      {screen === 'game' && <audio src="/sounds/bgm.wav" loop autoPlay />}
       {screen === 'disclaimer' && <DisclaimerScreen onAccept={handleDisclaimerAccept} />}
       {screen === 'start' && <StartScreen onStart={() => setScreen('game')} onShowDisclaimer={() => setScreen('disclaimer')} />}
       {screen === 'game' && <GameScreen />}
