@@ -80,7 +80,7 @@ export default function TutorialScreen({ onClose }: Props) {
               <div>
                 <h3 style={{ fontSize: '26px', marginBottom: '10px', fontWeight: 'bold' }}>4. Lò Vi Sóng & Sự Cố</h3>
                 <p style={{ fontSize: '22px', lineHeight: '1.4', marginBottom: '15px' }}>
-                  Nấu xong mà bom đói không giao, đồ ăn sẽ bị <strong>nguội</strong>! Khi đó phải nhấp vào LÒ VI SÓNG ở bếp (tối đa 2 món/lần quay) tốn 10k tiền điện.
+                  Bạn có thể nấu sẵn một lố đồ ăn, nhưng nấu xong mà không đóng hộp ngay, đồ ăn sẽ bị <strong>nguội</strong>! Khi đó phải nhấp vào LÒ VI SÓNG ở bếp (tối đa 2 món/lần quay) tốn 10k tiền điện. Cuối ngày đồ ăn thừa sẽ bị tính phí đổ bỏ, cẩn thận!
                 </p>
                 <p style={{ fontSize: '22px', lineHeight: '1.4', marginBottom: '15px' }}>
                   Thỉnh thoảng có khách bom hàng, xế lừa đảo, hãy cẩn thận chọn "Tin Tưởng" hay "Kiểm Tra" nhé. Chúc bạn một ngày buôn bán đắt khách!

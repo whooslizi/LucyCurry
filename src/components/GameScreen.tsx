@@ -10,6 +10,7 @@ import { GameProvider, useGameState } from '../game/gameState'
 function GameContent() {
   const { state } = useGameState();
   const [isDayOver, setIsDayOver] = useState(false);
+  const [wastePenalty, setWastePenalty] = useState(0);
 
   const [showTutorial, setShowTutorial] = useState(() => !localStorage.getItem('lucyCurry_tutorialRead'));
 
@@ -33,9 +34,9 @@ function GameContent() {
   return (
     <div className="screen-container">
       {!isDayOver ? (
-        <ShopScene onEndDay={() => setIsDayOver(true)} />
+        <ShopScene onEndDay={(p) => { setWastePenalty(p); setIsDayOver(true); }} />
       ) : (
-        <DailySummary onNextDay={() => setIsDayOver(false)} />
+        <DailySummary wastePenalty={wastePenalty} onNextDay={() => setIsDayOver(false)} />
       )}
     </div>
   );

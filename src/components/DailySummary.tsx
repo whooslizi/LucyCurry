@@ -3,9 +3,10 @@ import { useGameState } from '../game/gameState';
 
 interface Props {
   onNextDay: () => void;
+  wastePenalty?: number;
 }
 
-export default function DailySummary({ onNextDay }: Props) {
+export default function DailySummary({ onNextDay, wastePenalty = 0 }: Props) {
   const { state, dispatch } = useGameState();
   const [taxPaid, setTaxPaid] = useState(false);
   const [taxEventMessage, setTaxEventMessage] = useState('');
@@ -40,7 +41,7 @@ export default function DailySummary({ onNextDay }: Props) {
   };
 
   return (
-    <div className="portrait-container" style={{ background: '#2d1815', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+    <div className="portrait-container" style={{ background: '#2d1815', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', padding: '20px', overflowY: 'auto' }}>
       
       <div style={{ width: '100%', background: '#e0c097', border: '6px solid #8d6e63', padding: '20px', color: '#3e2723' }}>
         <h2 style={{ textAlign: 'center', fontSize: '36px', color: '#b71c1c', borderBottom: '4px solid #b71c1c', paddingBottom: '10px' }}>TỔNG KẾT NGÀY {state.day}</h2>
@@ -58,6 +59,12 @@ export default function DailySummary({ onNextDay }: Props) {
             <span>Chi phí (Vốn, Ship, Phạt):</span>
             <strong style={{ color: '#c62828' }}>- {formatMoney(state.expensesToday)}</strong>
           </div>
+                    {wastePenalty > 0 && (
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', color: '#ff9800', fontStyle: 'italic' }}>
+              <span>↳ Phí đổ đồ ăn thừa (đã tính vào chi phí):</span>
+              <span>- {formatMoney(wastePenalty)}</span>
+            </div>
+          )}
           <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '2px dashed #8d6e63', paddingTop: '10px', marginTop: '10px' }}>
             <span>Lợi nhuận:</span>
             <strong style={{ color: state.profitToday >= 0 ? '#2e7d32' : '#c62828' }}>

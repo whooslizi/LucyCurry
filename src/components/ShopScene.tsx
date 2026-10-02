@@ -6,7 +6,7 @@ import TutorialScreen from './TutorialScreen';
 import DeliveryMinigame from './DeliveryMinigame';
 
 interface Props {
-  onEndDay: () => void;
+  onEndDay: (penalty: number) => void;
 }
 
 export default function ShopScene({ onEndDay }: Props) {
@@ -90,7 +90,12 @@ export default function ShopScene({ onEndDay }: Props) {
     const loop = setInterval(() => {
       if (state.timeMinutes >= state.closingMinutes) {
         setIsShopOpen(false);
-        onEndDay();
+        const leftovers = Object.values(cookedDishes).reduce((a,b)=>a+b, 0) + Object.values(coldDishes).reduce((a,b)=>a+b, 0);
+        const penalty = leftovers * 15000; // 15k penalty per wasted item
+        if (penalty > 0) {
+           dispatch({ type: 'ADD_EXPENSE', payload: penalty });
+        }
+        onEndDay(penalty);
         return;
       }
       

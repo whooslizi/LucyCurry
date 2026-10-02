@@ -8,6 +8,21 @@ function App() {
   const [interacted, setInteracted] = useState(false);
 
   useEffect(() => {
+    const handleVisibilityChange = () => {
+      const audios = document.querySelectorAll('audio');
+      audios.forEach(audio => {
+        if (document.hidden) {
+          audio.pause();
+        } else {
+          audio.play().catch(()=>{});
+        }
+      });
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, []);
+
+  useEffect(() => {
     if (localStorage.getItem('lucyCurry_disclaimerAccepted')) {
       setScreen('start');
     }
