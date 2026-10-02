@@ -54,9 +54,15 @@ export default function DisclaimerScreen({ onAccept }: Props) {
                   Nếu bạn yêu thích cô Lộc Lucy và muốn ủng hộ, bạn có thể đặt cà ri trực tiếp qua Zalo của cô.
                 </p>
                 <div style={{ background: '#fff', border: '3px dashed #d84315', padding: '10px', marginTop: '15px' }}>
-                  <h4 style={{ color: '#d84315', margin: '0 0 5px 0', fontSize: '24px' }}>🔒 Về quyền riêng tư:</h4>
+                  <h4 style={{ color: '#d84315', margin: '0 0 5px 0', fontSize: '24px' }}>Về quyền riêng tư:</h4>
                   <p style={{ fontSize: '20px', margin: 0, color: '#000' }}>
                     Trò chơi này hoàn toàn chạy trên trình duyệt của bạn. Mọi tiến trình (bao gồm tên, tiền bạc và tài sản trong game) chỉ được lưu trữ cục bộ (Local Storage) trên thiết bị. Chúng mình <strong>không thu thập, không lưu trữ hay gửi bất kỳ dữ liệu cá nhân nào</strong> của bạn lên máy chủ.
+                  </p>
+                </div>
+                <div style={{ background: '#f5e6cc', border: '3px dashed #5d4037', padding: '10px', marginTop: '15px' }}>
+                  <h4 style={{ color: '#5d4037', margin: '0 0 5px 0', fontSize: '24px' }}>Về hình ảnh trong game:</h4>
+                  <p style={{ fontSize: '20px', margin: 0, color: '#000' }}>
+                    Xin lỗi bạn thật nhiều nếu đồ họa trong game trông có vẻ "hơi phèn" hay "xấu quắc" . Vì toàn bộ hình ảnh 8-bit trong này đều do lập trình viên tự gõ bằng code (Programmer Art) thay vì họa sĩ vẽ tay. Mong bạn thông cảm và tập trung tận hưởng cốt truyện nha!
                   </p>
                 </div>
               </div>

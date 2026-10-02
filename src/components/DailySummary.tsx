@@ -25,12 +25,23 @@ export default function DailySummary({ onNextDay, wastePenalty = 0 }: Props) {
   };
 
   const handleEvadeTax = () => {
-    if (Math.random() < 0.5) { // 50% chance to get caught
+    const roll = Math.random();
+    if (roll < 0.50) {
+      // 50% chance: R - Easy Success
+      setTaxEventMessage(`R (Normal) Trót lọt! Kế toán "ma giáo" đã hô biến sổ sách. Bạn giữ lại được ${formatMoney(taxAmount)}.`);
+    } else if (roll < 0.75) {
+      // 25% chance: SR - Close Call Success
+      setTaxEventMessage(`SR (Hiếm) Thoát tim! Thanh tra phường ghé thăm nhưng bạn đã nhanh tay giấu sổ tay dưới đáy nồi cà ri. Vẫn trót lọt ${formatMoney(taxAmount)}!`);
+    } else if (roll < 0.95) {
+      // 20% chance: SSR - Caught (x3 fine)
       const fine = taxAmount * 3;
-      dispatch({ type: 'PAY_TAX', payload: fine }); // It deducts money in GameState
-      setTaxEventMessage(`🚨 BỊ BẮT! Thanh tra phát hiện bạn trốn thuế ${formatMoney(taxAmount)}. Bị phạt gấp 3 lần: Tịch thu ${formatMoney(fine)}!`);
+      dispatch({ type: 'PAY_TAX', payload: fine });
+      setTaxEventMessage(`SSR (Cực hiếm) BỊ TÓM! Có người báo cáo lên thuế. Thanh tra ập vào phạt bạn gấp 3 lần: Mất trắng ${formatMoney(fine)}!`);
     } else {
-      setTaxEventMessage(`😎 Trót lọt! Bạn đã trốn thuế thành công và giữ lại được ${formatMoney(taxAmount)}.`);
+      // 5% chance: UR - Disaster (x10 fine)
+      const fine = taxAmount * 10;
+      dispatch({ type: 'PAY_TAX', payload: fine });
+      setTaxEventMessage(`UR (Siêu cấp hiếm) CÔNG AN KINH TẾ! Lên VTV1! Lệnh phong tỏa tài khoản được ban hành, bạn bị phạt x10 lần thuế: ÂM ${formatMoney(fine)}!!!`);
     }
     setTaxPaid(true);
   };
