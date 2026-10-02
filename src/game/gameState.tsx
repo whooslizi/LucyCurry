@@ -132,7 +132,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     try {
       const saved = localStorage.getItem('lucy_save_v1');
       if (saved) {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (!parsed.menuPrices) {
+          parsed.menuPrices = { 'Cơm cà ri gà': 35000, 'Cơm cà ri bò': 45000, 'Cơm cà ri heo': 40000, 'Udon cà ri tôm': 55000 };
+        }
+        return parsed;
       }
     } catch (e) {
       console.error("Failed to load save", e);
