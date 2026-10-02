@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useGameState } from '../game/gameState';
 import { Order } from '../types/game';
 import RecipeModal from './RecipeModal';
+import TutorialScreen from './TutorialScreen';
 import DeliveryMinigame from './DeliveryMinigame';
 
 interface Props {
@@ -12,6 +13,7 @@ export default function ShopScene({ onEndDay }: Props) {
   const { state, dispatch } = useGameState();
   
   const [showRecipe, setShowRecipe] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
   const [isDelivering, setIsDelivering] = useState(false);
   const [deliveringOrder, setDeliveringOrder] = useState<Order | null>(null);
   
@@ -357,6 +359,7 @@ export default function ShopScene({ onEndDay }: Props) {
   return (
     <div className="portrait-container" style={{ display: 'flex', flexDirection: 'column', height: '100dvh', maxHeight: '100dvh', overflow: 'hidden', background: '#3e2723' }}>
       {showRecipe && <RecipeModal onClose={() => setShowRecipe(false)} />}
+      {showTutorial && <TutorialScreen onClose={() => setShowTutorial(false)} />}
       {toastMsg && (
         <div style={{ position: 'absolute', top: '80px', left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.8)', color: '#fff', padding: '10px 20px', borderRadius: '20px', fontSize: '18px', zIndex: 999, whiteSpace: 'nowrap' }}>
           {toastMsg}
@@ -648,6 +651,9 @@ export default function ShopScene({ onEndDay }: Props) {
           <div style={{ fontSize: '32px', fontWeight: 'bold', lineHeight: '1' }}>{formatTime(state.timeMinutes)}</div>
           <div style={{ color: '#f44336', fontSize: '18px', fontWeight: 'bold', margin: '5px 0' }}>CÒN LẠI: {Math.floor((state.closingMinutes - state.timeMinutes) / 60)}h {(state.closingMinutes - state.timeMinutes) % 60}m</div>
           <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+            <button onClick={() => setShowTutorial(true)} style={{ background: 'transparent', padding: 0, border: 'none', color: '#fff', fontSize: '18px', textDecoration: 'underline' }}>
+              Cách chơi
+            </button>
             <button onClick={() => setShowRecipe(true)} style={{ background: 'transparent', padding: 0, border: 'none', color: '#fff', fontSize: '18px', textDecoration: 'underline' }}>
               Sổ công thức
             </button>
@@ -667,6 +673,17 @@ export default function ShopScene({ onEndDay }: Props) {
         
         <img src="/images/window.svg" style={{ position: 'absolute', top: '15px', left: '20px', width: '90px', boxShadow: '2px 2px 10px #000' }} />
         <img src="/images/wood.svg" style={{ position: 'absolute', bottom: '15px', left: '15px', width: '100px' }} />
+        
+        {/* Microwave */}
+        <div onClick={() => setShowMicrowave(true)} style={{ position: 'absolute', top: '15px', right: '20px', width: '80px', height: '60px', cursor: 'pointer' }}>
+          <img src="/images/microwave.svg" style={{ width: '100%', height: '100%', imageRendering: 'pixelated', filter: 'drop-shadow(2px 2px 0 #000)' }} />
+          {Object.values(coldDishes).reduce((a,b)=>a+b,0) > 0 && (
+             <div style={{ position: 'absolute', top: '18px', left: '25px', color: '#ffb300', fontSize: '16px', fontWeight: 'bold', textShadow: '1px 1px 0 #000' }}>
+               {Object.values(coldDishes).reduce((a,b)=>a+b,0)}
+             </div>
+          )}
+          <div style={{ position: 'absolute', top: '-15px', right: '0', background: '#ff9800', color: '#fff', fontSize: '10px', padding: '2px 4px', border: '1px solid #000', fontWeight: 'bold', whiteSpace: 'nowrap' }}>LÒ VI SÓNG</div>
+        </div>
         
         <div style={{ position: 'absolute', bottom: '20px', left: '130px', width: '120px' }}>
           {isCooking && <div style={{ color: '#ffb300', fontSize: '20px', marginBottom: '5px', fontWeight: 'bold', background: '#000', padding: '2px 8px', borderRadius: '10px', textAlign: 'center' }}>ĐANG NẤU</div>}
@@ -755,12 +772,7 @@ export default function ShopScene({ onEndDay }: Props) {
             ))}
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <div style={{ fontSize: '22px', color: '#d84315', fontWeight: 'bold' }}>Chọn món để nấu</div>
-            <button onClick={() => setShowMicrowave(true)} style={{ background: '#00bcd4', color: '#fff', fontWeight: 'bold', padding: '5px 10px', borderRadius: '5px', border: '2px solid #000' }}>
-              ♨️ LÒ VI SÓNG ({Object.values(coldDishes).reduce((a,b)=>a+b,0)})
-            </button>
-          </div>
+          <div style={{ fontSize: '22px', color: '#d84315', marginBottom: '8px', fontWeight: 'bold' }}>Chọn món để nấu</div>
           <div style={{ background: '#fff', border: '3px solid #8d6e63', padding: '10px', borderRadius: '8px' }}>
             {RECIPES.map(recipe => {
               const isUnlocked = state.unlockedRecipes.includes(recipe.name);
