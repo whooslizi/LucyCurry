@@ -5,25 +5,28 @@ import GameScreen from './components/GameScreen'
 
 function App() {
   const [screen, setScreen] = useState<'disclaimer' | 'start' | 'game'>('disclaimer');
-  const [musicStarted, setMusicStarted] = useState(false);
+  const [interacted, setInteracted] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem('lucyCurry_disclaimerAccepted')) {
       setScreen('start');
     }
+    
+    const onInteract = () => setInteracted(true);
+    window.addEventListener('click', onInteract, { once: true });
+    return () => window.removeEventListener('click', onInteract);
   }, []);
 
   const handleDisclaimerAccept = () => {
     localStorage.setItem('lucyCurry_disclaimerAccepted', 'true');
-    setScreen('start')
-    setMusicStarted(true);
+    setScreen('start');
   }
 
   return (
     <>
-      {musicStarted && <audio src="/sounds/bgm.wav" loop autoPlay />}
+      {interacted && screen !== 'game' && <audio src="/sounds/yassss.mp3" loop autoPlay />}
       {screen === 'disclaimer' && <DisclaimerScreen onAccept={handleDisclaimerAccept} />}
-      {screen === 'start' && <StartScreen onStart={() => { setScreen('game'); setMusicStarted(true); }} onShowDisclaimer={() => setScreen('disclaimer')} />}
+      {screen === 'start' && <StartScreen onStart={() => setScreen('game')} onShowDisclaimer={() => setScreen('disclaimer')} />}
       {screen === 'game' && <GameScreen />}
     </>
   )
