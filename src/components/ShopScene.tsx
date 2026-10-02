@@ -397,7 +397,7 @@ export default function ShopScene({ onEndDay }: Props) {
       {buyModalItem && (
         <div className="modal-backdrop" style={{ zIndex: 110 }}>
           <div className="modal-content" style={{ background: '#e0c097', border: '6px solid #8d6e63', textAlign: 'center', color: '#3e2723', width: '90%', maxWidth: '400px' }}>
-            <h2 style={{ fontSize: '28px', color: '#d84315', marginTop: 0 }}>NHẬP SỈ: {buyModalItem.name.toUpperCase()}</h2>
+            <h2 style={{ fontSize: '24px', color: '#d84315', marginTop: 0 }}>NHẬP SỈ: {buyModalItem.name.toUpperCase()}</h2>
             <img src={buyModalItem.img} style={{ width: '64px', height: '64px', imageRendering: 'pixelated', marginBottom: '10px' }} />
             <p style={{ fontSize: '20px', margin: 0 }}>Giá nhập: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(buyModalItem.price)} / phần</p>
             
@@ -412,7 +412,7 @@ export default function ShopScene({ onEndDay }: Props) {
               <button onClick={() => setBuyModalQty(buyModalQty + 10)} style={{ background: '#9e9e9e', fontSize: '18px', padding: '10px', color: '#fff', fontWeight: 'bold', border: '2px solid #000' }}>+10</button>
             </div>
             
-            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#d84315', marginBottom: '20px', background: '#fff', padding: '10px', border: '2px dashed #d84315' }}>
+            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#d84315', marginBottom: '20px', background: '#fff', padding: '10px', border: '2px dashed #d84315' }}>
               TỔNG CỘNG: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(buyModalItem.price * buyModalQty)}
             </div>
 
@@ -428,8 +428,8 @@ export default function ShopScene({ onEndDay }: Props) {
                   playSound('error');
                   setCustomAlert('Không đủ tiền!');
                 }
-              }} style={{ flex: 1, background: '#4caf50', fontSize: '24px', padding: '15px', color: '#fff', border: '3px solid #000' }}>CHỐT SỈ</button>
-              <button onClick={() => setBuyModalItem(null)} style={{ flex: 1, background: '#757575', fontSize: '24px', padding: '15px', color: '#fff', border: '3px solid #000' }}>HỦY</button>
+              }} style={{ flex: 1, background: '#4caf50', fontSize: '20px', padding: '15px', color: '#fff', border: '3px solid #000' }}>CHỐT SỈ</button>
+              <button onClick={() => setBuyModalItem(null)} style={{ flex: 1, background: '#757575', fontSize: '20px', padding: '15px', color: '#fff', border: '3px solid #000' }}>HỦY</button>
             </div>
           </div>
         </div>
@@ -440,7 +440,7 @@ export default function ShopScene({ onEndDay }: Props) {
       {showMicrowave && (
         <div className="modal-backdrop" style={{ zIndex: 120 }}>
           <div className="modal-content" style={{ background: '#fff9c4', border: '6px solid #fbc02d', color: '#3e2723', padding: '20px', width: '90%', maxWidth: '400px' }}>
-            <h2 style={{ fontSize: '28px', color: '#f57f17', textAlign: 'center', marginTop: 0 }}>♨️ LÒ VI SÓNG ♨️</h2>
+            <h2 style={{ fontSize: '24px', color: '#f57f17', textAlign: 'center', marginTop: 0 }}>♨️ LÒ VI SÓNG ♨️</h2>
             <p style={{ textAlign: 'center', fontWeight: 'bold' }}>Tối đa 2 món / lần quay. Phí điện: 10k</p>
             
             <div style={{ background: '#fff', border: '3px solid #ccc', minHeight: '100px', padding: '10px', marginBottom: '15px' }}>
@@ -516,8 +516,8 @@ export default function ShopScene({ onEndDay }: Props) {
         <div className="modal-backdrop" style={{ zIndex: 9999 }}>
           <div className="modal-content" style={{ background: '#f5e6cc', border: '6px solid #d32f2f', textAlign: 'center', color: '#3e2723', padding: '20px', width: '90%', maxWidth: '400px' }}>
             <h2 style={{ fontSize: '32px', color: '#d32f2f', marginTop: 0 }}>THÔNG BÁO</h2>
-            <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{customAlert}</p>
-            <button onClick={() => setCustomAlert(null)} style={{ background: '#d32f2f', color: '#fff', fontSize: '24px', padding: '10px 30px', border: '3px solid #000', fontWeight: 'bold', marginTop: '15px' }}>ĐÓNG</button>
+            <p style={{ fontSize: '20px', fontWeight: 'bold' }}>{customAlert}</p>
+            <button onClick={() => setCustomAlert(null)} style={{ background: '#d32f2f', color: '#fff', fontSize: '20px', padding: '10px 30px', border: '3px solid #000', fontWeight: 'bold', marginTop: '15px' }}>ĐÓNG</button>
           </div>
         </div>
       )}
@@ -529,7 +529,7 @@ export default function ShopScene({ onEndDay }: Props) {
         <div className="modal-backdrop" style={{ zIndex: 100 }}>
           <div className="modal-content" style={{ background: '#f5e6cc', border: '6px solid #8d6e63', padding: '20px', textAlign: 'center', color: '#3e2723' }}>
             <h2 style={{ fontSize: '32px', color: '#d32f2f' }}>SỰ CỐ!</h2>
-            <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{currentEvent.message}</p>
+            <p style={{ fontSize: '20px', fontWeight: 'bold' }}>{currentEvent.message}</p>
             <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '20px' }}>
               <button onClick={() => currentEvent.onResolve(true)} style={{ background: '#d84315', padding: '15px', fontSize: '20px', fontWeight: 'bold', border: '2px solid #000', color: '#fff' }}>TIN TƯỞNG</button>
               <button onClick={() => currentEvent.onResolve(false)} style={{ background: '#4caf50', padding: '15px', fontSize: '20px', fontWeight: 'bold', border: '2px solid #000', color: '#fff' }}>KIỂM TRA LẠI</button>
@@ -542,7 +542,7 @@ export default function ShopScene({ onEndDay }: Props) {
       {showPhone && (
         <div className="modal-backdrop" onClick={() => setShowPhone(false)}>
           <div className="modal-content" onClick={e => e.stopPropagation()} style={{ width: '90%', height: '80%', background: '#fff', border: '6px solid #000', borderRadius: '25px', padding: '10px', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#e0e0e0', padding: '15px', borderRadius: '15px 15px 0 0', fontWeight: 'bold', fontSize: '28px', color: '#000' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#e0e0e0', padding: '15px', borderRadius: '15px 15px 0 0', fontWeight: 'bold', fontSize: '24px', color: '#000' }}>
               <span>CàriChat</span>
               <button onClick={() => setSilentMode(!silentMode)} style={{ background: silentMode ? '#f44336' : '#9e9e9e', color: '#fff', fontSize: '16px', padding: '5px 10px', borderRadius: '8px', border: 'none', fontWeight: 'bold' }}>
                 {silentMode ? '🔕 IM LẶNG' : '🔔 ĐỔ CHUÔNG'}
@@ -553,7 +553,7 @@ export default function ShopScene({ onEndDay }: Props) {
               {state.phoneOrders.map(order => {
                 const qStatus = quotingOrders[order.id];
                 return (
-                <div key={order.id} style={{ background: '#e3f2fd', color: '#000', padding: '15px', borderRadius: '15px', marginBottom: '15px', fontSize: '22px', boxShadow: '2px 2px 5px rgba(0,0,0,0.2)' }}>
+                <div key={order.id} style={{ background: '#e3f2fd', color: '#000', padding: '15px', borderRadius: '15px', marginBottom: '15px', fontSize: '18px', boxShadow: '2px 2px 5px rgba(0,0,0,0.2)' }}>
                   <strong>{order.customerName}:</strong>
                   <div style={{ marginTop: '5px' }}>Chị ơi cho em đơn:</div>
                   <ul style={{ margin: '10px 0', paddingLeft: '25px', fontWeight: 'bold', color: '#d84315' }}>
@@ -588,7 +588,7 @@ export default function ShopScene({ onEndDay }: Props) {
                 </div>
               )})}
             </div>
-            <button onClick={() => setShowPhone(false)} style={{ background: '#000', color: '#fff', padding: '15px', borderRadius: '0 0 15px 15px', fontSize: '24px', fontWeight: 'bold' }}>ĐÓNG ĐIỆN THOẠI</button>
+            <button onClick={() => setShowPhone(false)} style={{ background: '#000', color: '#fff', padding: '15px', borderRadius: '0 0 15px 15px', fontSize: '20px', fontWeight: 'bold' }}>ĐÓNG ĐIỆN THOẠI</button>
           </div>
         </div>
       )}
@@ -631,7 +631,7 @@ export default function ShopScene({ onEndDay }: Props) {
             </div>
             
             <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
-              <button onClick={confirmPacking} style={{ flex: 2, background: '#4caf50', padding: '15px', fontSize: '24px', fontWeight: 'bold', color: '#fff', border: '3px solid #1b5e20' }}>
+              <button onClick={confirmPacking} style={{ flex: 2, background: '#4caf50', padding: '15px', fontSize: '20px', fontWeight: 'bold', color: '#fff', border: '3px solid #1b5e20' }}>
                 CHỐT HỘP & GIAO!
               </button>
               <button onClick={() => {
@@ -656,12 +656,12 @@ export default function ShopScene({ onEndDay }: Props) {
         <div className="modal-backdrop" style={{ zIndex: 100 }}>
           <div className="modal-content" style={{ background: '#f5e6cc', border: '6px solid #8d6e63', padding: '20px', textAlign: 'center', color: '#3e2723' }}>
             <h2 style={{ fontSize: '32px', margin: '0 0 10px 0', color: '#d84315' }}>HỘP ĐÃ SẴN SÀNG</h2>
-            <p style={{ fontSize: '24px', fontWeight: 'bold' }}>Order #{shippingModalOrder.id} - {shippingModalOrder.customerName}</p>
+            <p style={{ fontSize: '20px', fontWeight: 'bold' }}>Order #{shippingModalOrder.id} - {shippingModalOrder.customerName}</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '20px' }}>
-              <button onClick={() => executeDelivery('shipper')} style={{ background: '#4caf50', padding: '15px', fontSize: '24px', fontWeight: 'bold', color: '#fff', border: '3px solid #000' }}>
+              <button onClick={() => executeDelivery('shipper')} style={{ background: '#4caf50', padding: '15px', fontSize: '20px', fontWeight: 'bold', color: '#fff', border: '3px solid #000' }}>
                 GỌI XẾ (-15K)
               </button>
-              <button onClick={() => executeDelivery('self')} style={{ background: '#2e7d32', padding: '15px', fontSize: '24px', fontWeight: 'bold', color: '#fff', border: '3px solid #000' }}>
+              <button onClick={() => executeDelivery('self')} style={{ background: '#2e7d32', padding: '15px', fontSize: '20px', fontWeight: 'bold', color: '#fff', border: '3px solid #000' }}>
                 TỰ SHIP (+30P)
               </button>
             </div>
@@ -670,7 +670,7 @@ export default function ShopScene({ onEndDay }: Props) {
       )}
 
       {/* Header */}
-      <div style={{ background: '#1a0f0d', color: '#ffb300', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 15px', borderBottom: '2px solid #000', fontSize: '24px' }}>
+      <div style={{ background: '#1a0f0d', color: '#ffb300', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 15px', borderBottom: '2px solid #000', fontSize: '20px' }}>
         <div>
           <span>Ngày {state.day} </span><br/>
           <span style={{ color: '#4caf50' }}>{formatMoney(state.money)}</span>
@@ -725,7 +725,7 @@ export default function ShopScene({ onEndDay }: Props) {
           onClick={() => setShowPhone(true)}
           style={{ position: 'absolute', bottom: '20px', right: '15px', background: state.phoneOrders.length > 0 ? '#f44336' : '#2196f3', width: '80px', height: '120px', borderRadius: '10px', border: '4px solid #000', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '4px 4px 0 rgba(0,0,0,0.5)', animation: state.phoneOrders.length > 0 ? 'shake 0.5s infinite' : 'none', zIndex: 10 }}
         >
-          <div style={{ color: '#fff', fontSize: '22px', fontWeight: 'bold', textAlign: 'center' }}>
+          <div style={{ color: '#fff', fontSize: '18px', fontWeight: 'bold', textAlign: 'center' }}>
             CHAT
             {state.phoneOrders.length > 0 && <div style={{ background: '#fff', color: '#f44336', borderRadius: '50%', width: '35px', height: '35px', margin: '5px auto 0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{state.phoneOrders.length}</div>}
           </div>
@@ -748,7 +748,7 @@ export default function ShopScene({ onEndDay }: Props) {
                 backdropFilter: 'blur(2px)'
               }}
             >
-              <div style={{ fontSize: '22px', color: '#000', fontWeight: 'bold', marginBottom: '5px', borderBottom: '1px solid rgba(0,0,0,0.2)' }}>#{order.id}</div>
+              <div style={{ fontSize: '18px', color: '#000', fontWeight: 'bold', marginBottom: '5px', borderBottom: '1px solid rgba(0,0,0,0.2)' }}>#{order.id}</div>
               <div style={{ fontSize: '18px', color: '#d84315', fontWeight: 'bold' }}>
                 {order.items.map((it, i) => <div key={i}>- {it.quantity}x {it.name}</div>)}
               </div>
@@ -778,7 +778,7 @@ export default function ShopScene({ onEndDay }: Props) {
       <div style={{ flex: 1, minHeight: 0, background: '#f5e6cc', display: 'flex', flexDirection: 'column' }}>
         <div style={{ flex: 1, overflowY: 'auto', padding: '10px' }}>
           
-          <div style={{ fontSize: '22px', color: '#d84315', marginBottom: '8px', fontWeight: 'bold' }}>Kho nguyên liệu · Bấm để mua</div>
+          <div style={{ fontSize: '18px', color: '#d84315', marginBottom: '8px', fontWeight: 'bold' }}>Kho nguyên liệu · Bấm để mua</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '15px' }}>
              {INGREDIENTS.map(item => (
               <div key={item.name} onClick={() => { setBuyModalItem(item); setBuyModalQty(1); }} style={{ 
@@ -800,7 +800,7 @@ export default function ShopScene({ onEndDay }: Props) {
             ))}
           </div>
 
-          <div style={{ fontSize: '22px', color: '#d84315', marginBottom: '8px', fontWeight: 'bold' }}>Chọn món để nấu</div>
+          <div style={{ fontSize: '18px', color: '#d84315', marginBottom: '8px', fontWeight: 'bold' }}>Chọn món để nấu</div>
           <div style={{ background: '#fff', border: '3px solid #8d6e63', padding: '10px', borderRadius: '8px' }}>
             {RECIPES.map(recipe => {
               const isUnlocked = state.unlockedRecipes.includes(recipe.name);
@@ -823,9 +823,9 @@ export default function ShopScene({ onEndDay }: Props) {
                     </button>
                   ) : (
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <button onClick={() => handleDishChange(recipe.name, -1, recipe.req)} style={{ background: '#e53935', color: '#fff', padding: '5px 12px', fontSize: '24px', border: '2px solid #000', borderRadius: '5px' }}>-</button>
-                      <span style={{ width: '35px', textAlign: 'center', fontSize: '24px', color: '#000', fontWeight: 'bold' }}>{qty}</span>
-                      <button onClick={() => handleDishChange(recipe.name, 1, recipe.req)} style={{ background: '#4caf50', color: '#fff', padding: '5px 12px', fontSize: '24px', border: '2px solid #000', borderRadius: '5px' }}>+</button>
+                      <button onClick={() => handleDishChange(recipe.name, -1, recipe.req)} style={{ background: '#e53935', color: '#fff', padding: '5px 12px', fontSize: '20px', border: '2px solid #000', borderRadius: '5px' }}>-</button>
+                      <span style={{ width: '35px', textAlign: 'center', fontSize: '20px', color: '#000', fontWeight: 'bold' }}>{qty}</span>
+                      <button onClick={() => handleDishChange(recipe.name, 1, recipe.req)} style={{ background: '#4caf50', color: '#fff', padding: '5px 12px', fontSize: '20px', border: '2px solid #000', borderRadius: '5px' }}>+</button>
                     </div>
                   )}
                   {hasCooked > 0 && <span style={{ marginLeft: '10px', fontSize: '18px', color: '#4caf50', fontWeight: 'bold' }}>(Sẵn: {hasCooked})</span>}
@@ -842,7 +842,7 @@ export default function ShopScene({ onEndDay }: Props) {
             disabled={isCooking || Object.values(selectedDishes).reduce((a,b)=>a+b,0) === 0}
             style={{ 
               width: '100%', background: isCooking ? '#9e9e9e' : '#ff9800', padding: '15px', 
-              fontSize: '24px', border: '3px solid #3e2723', fontWeight: 'bold', 
+              fontSize: '20px', border: '3px solid #3e2723', fontWeight: 'bold', 
               borderRadius: '10px', color: '#000', cursor: isCooking ? 'not-allowed' : 'pointer',
               boxShadow: '0 4px 0 #3e2723'
             }}

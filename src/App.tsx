@@ -39,7 +39,7 @@ function App() {
         onClick={() => setInteracted(true)}
         style={{ width: '100vw', height: '100dvh', background: '#3e2723', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexDirection: 'column' }}
       >
-        <h1 style={{ color: '#ffb300', fontSize: '36px', marginBottom: '20px', textAlign: 'center', animation: 'pulse 1.5s infinite' }}>
+        <h1 style={{ color: '#ffb300', fontSize: '28px', marginBottom: '20px', textAlign: 'center', animation: 'pulse 1.5s infinite' }}>
           CHẠM VÀO MÀN HÌNH ĐỂ BẮT ĐẦU
         </h1>
         <p style={{ color: '#fff', fontSize: '18px' }}>(Bật tiếng để có trải nghiệm tốt nhất)</p>
