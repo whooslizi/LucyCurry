@@ -16,7 +16,7 @@ export default function TutorialScreen({ onClose }: Props) {
   };
 
   return (
-    <div className="portrait-container" style={{ background: '#2d1815', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
+    <div className="modal-backdrop" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
       
       <div style={{ 
         width: '90%', 
