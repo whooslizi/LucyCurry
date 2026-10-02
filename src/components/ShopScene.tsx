@@ -26,6 +26,7 @@ export default function ShopScene({ onEndDay }: Props) {
   const silentModeRef = useRef(silentMode);
   useEffect(() => { silentModeRef.current = silentMode; }, [silentMode]);
   const [toastMsg, setToastMsg] = useState('');
+  const [customAlert, setCustomAlert] = useState<string | null>(null);
   const [quotingOrders, setQuotingOrders] = useState<Record<string, 'quoting' | 'paid' | 'nhay'>>({});
 
   // Shop status
@@ -37,6 +38,9 @@ export default function ShopScene({ onEndDay }: Props) {
   const [isCooking, setIsCooking] = useState(false);
   const [cookingProgress, setCookingProgress] = useState(0);
   const [cookedDishes, setCookedDishes] = useState<Record<string, number>>({});
+  const [coldDishes, setColdDishes] = useState<Record<string, number>>({});
+  const [showMicrowave, setShowMicrowave] = useState(false);
+  const [microwaveItems, setMicrowaveItems] = useState<Record<string, number>>({});
 
   const formatTime = (minutes: number) => {
     const h = Math.floor(minutes / 60);
@@ -133,10 +137,14 @@ export default function ShopScene({ onEndDay }: Props) {
           const keys = Object.keys(prev).filter(k => prev[k] > 0);
           if (keys.length > 0) {
             const victim = keys[Math.floor(Math.random() * keys.length)];
-            dispatch({ type: 'ADD_EXPENSE', payload: 5000 });
             playSound('error');
-            setToastMsg(`Phần ${victim} bị nguội, tốn 5,000đ tiền điện hâm lại!`);
+            setToastMsg(`Một phần ${victim} đã bị nguội! Đem ra lò vi sóng hâm lại nhé.`);
             setTimeout(() => setToastMsg(''), 4000);
+            
+            // Move to cold
+            setColdDishes(c => ({ ...c, [victim]: (c[victim] || 0) + 1 }));
+            const next = { ...prev, [victim]: prev[victim] - 1 };
+            return next;
           }
           return prev;
         });
@@ -151,11 +159,11 @@ export default function ShopScene({ onEndDay }: Props) {
             onResolve: (trusts) => {
               if (trusts) {
                 playSound('error');
-                alert("Bạn bị lừa! Bị trừ 50,000đ tiền vốn.");
+                setCustomAlert("Bạn bị lừa! Bị trừ 50,000đ tiền vốn.");
                 dispatch({ type: 'ADD_EXPENSE', payload: 50000 });
               } else {
                 playSound('cash');
-                alert("Bạn yêu cầu khách kiểm tra lại, khách thấy lỗi mạng liền chuyển khoản thật.");
+                setCustomAlert("Bạn yêu cầu khách kiểm tra lại, khách thấy lỗi mạng liền chuyển khoản thật.");
               }
               setCurrentEvent(null);
             }
@@ -167,11 +175,11 @@ export default function ShopScene({ onEndDay }: Props) {
             onResolve: (trusts) => {
               if (trusts) {
                 playSound('error');
-                alert("Xế bom hàng! Trừ 50,000đ bồi thường.");
+                setCustomAlert("Xế bom hàng! Trừ 50,000đ bồi thường.");
                 dispatch({ type: 'ADD_EXPENSE', payload: 50000 });
               } else {
                 playSound('cash');
-                alert("Bạn từ chối. Lát sau có xế xịn đến nhận.");
+                setCustomAlert("Bạn từ chối. Lát sau có xế xịn đến nhận.");
               }
               setCurrentEvent(null);
             }
@@ -226,7 +234,7 @@ export default function ShopScene({ onEndDay }: Props) {
         }
         if (have - used < needed) {
           playSound('error');
-          alert(`Thiếu ${ing}! Hãy bấm mua trong Kho.`);
+          setCustomAlert(`Thiếu ${ing}! Hãy bấm mua trong Kho.`);
           return;
         }
       }
@@ -303,7 +311,7 @@ export default function ShopScene({ onEndDay }: Props) {
       setPackingModalOrder(null);
     } else {
       playSound('error');
-      alert('ĐÓNG SAI MÓN! Khách chửi rủa om sòm và hủy đơn. Bồi thường 50k!');
+      setCustomAlert('ĐÓNG SAI MÓN! Khách chửi rủa om sòm và hủy đơn. Bồi thường 50k!');
       // Remove all items in box (lost)
       setBoxItems({});
       dispatch({ type: 'UPDATE_ORDER_STATUS', payload: { id: packingModalOrder.id, status: 'completed' } });
@@ -387,11 +395,143 @@ export default function ShopScene({ onEndDay }: Props) {
                   setBuyModalItem(null);
                 } else {
                   playSound('error');
-                  alert('Không đủ tiền!');
+                  setCustomAlert('Không đủ tiền!');
                 }
               }} style={{ flex: 1, background: '#4caf50', fontSize: '24px', padding: '15px', color: '#fff', border: '3px solid #000' }}>CHỐT SỈ</button>
               <button onClick={() => setBuyModalItem(null)} style={{ flex: 1, background: '#757575', fontSize: '24px', padding: '15px', color: '#fff', border: '3px solid #000' }}>HỦY</button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {toastMsg && (
+        <div style={{ position: 'absolute', top: '80px', left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.8)', color: '#fff', padding: '10px 20px', borderRadius: '20px', fontSize: '18px', zIndex: 999, whiteSpace: 'nowrap' }}>
+          {toastMsg}
+        </div>
+      )}
+      
+      {buyModalItem && (
+        <div className="modal-backdrop" style={{ zIndex: 110 }}>
+          <div className="modal-content" style={{ background: '#e0c097', border: '6px solid #8d6e63', textAlign: 'center', color: '#3e2723' }}>
+            <h2 style={{ fontSize: '28px', color: '#d84315', marginTop: 0 }}>NHẬP SỈ: {buyModalItem.name.toUpperCase()}</h2>
+            <img src={buyModalItem.img} style={{ width: '64px', height: '64px', imageRendering: 'pixelated', marginBottom: '10px' }} />
+            <p style={{ fontSize: '20px', margin: 0 }}>Giá nhập: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(buyModalItem.price)} / phần</p>
+            
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '20px 0' }}>
+              <button onClick={() => setBuyModalQty(Math.max(1, buyModalQty - 1))} style={{ background: '#e53935', fontSize: '32px', width: '60px', height: '60px', borderRadius: '10px', border: '4px solid #000', color: '#fff' }}>-</button>
+              <div style={{ fontSize: '36px', width: '80px', textAlign: 'center', fontWeight: 'bold' }}>{buyModalQty}</div>
+              <button onClick={() => setBuyModalQty(buyModalQty + 1)} style={{ background: '#4caf50', fontSize: '32px', width: '60px', height: '60px', borderRadius: '10px', border: '4px solid #000', color: '#fff' }}>+</button>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
+              <button onClick={() => setBuyModalQty(Math.max(1, buyModalQty - 5))} style={{ background: '#9e9e9e', fontSize: '18px', padding: '10px', color: '#fff', fontWeight: 'bold', border: '2px solid #000' }}>-5</button>
+              <button onClick={() => setBuyModalQty(buyModalQty + 5)} style={{ background: '#9e9e9e', fontSize: '18px', padding: '10px', color: '#fff', fontWeight: 'bold', border: '2px solid #000' }}>+5</button>
+              <button onClick={() => setBuyModalQty(buyModalQty + 10)} style={{ background: '#9e9e9e', fontSize: '18px', padding: '10px', color: '#fff', fontWeight: 'bold', border: '2px solid #000' }}>+10</button>
+            </div>
+            
+            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#d84315', marginBottom: '20px', background: '#fff', padding: '10px', border: '2px dashed #d84315' }}>
+              TỔNG CỘNG: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(buyModalItem.price * buyModalQty)}
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button onClick={() => {
+                if (state.money >= buyModalItem.price * buyModalQty) {
+                  playSound('cash');
+                  for(let i=0; i<buyModalQty; i++) {
+                    dispatch({ type: 'BUY_INGREDIENT', payload: { item: buyModalItem.name, cost: buyModalItem.price } });
+                  }
+                  setBuyModalItem(null);
+                } else {
+                  playSound('error');
+                  setCustomAlert('Không đủ tiền!');
+                }
+              }} style={{ flex: 1, background: '#4caf50', fontSize: '24px', padding: '15px', color: '#fff', border: '3px solid #000' }}>CHỐT SỈ</button>
+              <button onClick={() => setBuyModalItem(null)} style={{ flex: 1, background: '#757575', fontSize: '24px', padding: '15px', color: '#fff', border: '3px solid #000' }}>HỦY</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showMicrowave && (
+        <div className="modal-backdrop" style={{ zIndex: 120 }}>
+          <div className="modal-content" style={{ background: '#fff9c4', border: '6px solid #fbc02d', color: '#3e2723', padding: '20px', width: '90%', maxWidth: '400px' }}>
+            <h2 style={{ fontSize: '28px', color: '#f57f17', textAlign: 'center', marginTop: 0 }}>♨️ LÒ VI SÓNG ♨️</h2>
+            <p style={{ textAlign: 'center', fontWeight: 'bold' }}>Tối đa 2 món / lần quay. Phí điện: 10k</p>
+            
+            <div style={{ background: '#fff', border: '3px solid #ccc', minHeight: '100px', padding: '10px', marginBottom: '15px' }}>
+              <div style={{ color: '#888', fontWeight: 'bold' }}>ĐỒ NGUỘI:</div>
+              {Object.keys(coldDishes).map(k => coldDishes[k] > 0 && (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', fontWeight: 'bold' }}>
+                  <span>{k} (x{coldDishes[k]})</span>
+                  <button onClick={() => {
+                    const totalMicro = Object.values(microwaveItems).reduce((a,b)=>a+b,0);
+                    if (totalMicro < 2) {
+                      setColdDishes(c => ({ ...c, [k]: c[k] - 1 }));
+                      setMicrowaveItems(m => ({ ...m, [k]: (m[k] || 0) + 1 }));
+                    } else {
+                      setCustomAlert('Lò vi sóng chỉ chứa tối đa 2 món!');
+                    }
+                  }} style={{ background: '#4caf50', color: '#fff', padding: '2px 10px' }}>CHO VÀO LÒ</button>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ background: '#e1f5fe', border: '3px solid #0288d1', minHeight: '100px', padding: '10px', marginBottom: '15px' }}>
+              <div style={{ color: '#0288d1', fontWeight: 'bold' }}>ĐANG TRONG LÒ:</div>
+              {Object.keys(microwaveItems).map(k => microwaveItems[k] > 0 && (
+                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', fontWeight: 'bold' }}>
+                  <span>{k} (x{microwaveItems[k]})</span>
+                  <button onClick={() => {
+                    setMicrowaveItems(m => ({ ...m, [k]: m[k] - 1 }));
+                    setColdDishes(c => ({ ...c, [k]: (c[k] || 0) + 1 }));
+                  }} style={{ background: '#f44336', color: '#fff', padding: '2px 10px' }}>LẤY RA</button>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button onClick={() => {
+                const totalMicro = Object.values(microwaveItems).reduce((a,b)=>a+b,0);
+                if (totalMicro === 0) return;
+                if (state.money < 10000) {
+                  setCustomAlert('Không đủ tiền trả tiền điện lò vi sóng (10k)!');
+                  return;
+                }
+                dispatch({ type: 'ADD_EXPENSE', payload: 10000 });
+                setCookedDishes(prev => {
+                  const next = { ...prev };
+                  for (const [dish, qty] of Object.entries(microwaveItems)) {
+                    next[dish] = (next[dish] || 0) + qty;
+                  }
+                  return next;
+                });
+                playSound('notification'); // Ding!
+                setMicrowaveItems({});
+                setShowMicrowave(false);
+              }} style={{ flex: 2, background: '#ff9800', color: '#fff', fontSize: '20px', padding: '10px', border: '3px solid #000', fontWeight: 'bold' }}>QUAY (10k)</button>
+              
+              <button onClick={() => {
+                // Return items to cold
+                setColdDishes(c => {
+                  const next = { ...c };
+                  for (const [dish, qty] of Object.entries(microwaveItems)) {
+                    next[dish] = (next[dish] || 0) + qty;
+                  }
+                  return next;
+                });
+                setMicrowaveItems({});
+                setShowMicrowave(false);
+              }} style={{ flex: 1, background: '#757575', color: '#fff', fontSize: '20px', padding: '10px', border: '3px solid #000', fontWeight: 'bold' }}>HỦY</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {customAlert && (
+        <div className="modal-backdrop" style={{ zIndex: 9999 }}>
+          <div className="modal-content" style={{ background: '#f5e6cc', border: '6px solid #d32f2f', textAlign: 'center', color: '#3e2723', padding: '20px', maxWidth: '80%' }}>
+            <h2 style={{ fontSize: '32px', color: '#d32f2f', marginTop: 0 }}>THÔNG BÁO</h2>
+            <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{customAlert}</p>
+            <button onClick={() => setCustomAlert(null)} style={{ background: '#d32f2f', color: '#fff', fontSize: '24px', padding: '10px 30px', border: '3px solid #000', fontWeight: 'bold', marginTop: '15px' }}>ĐÓNG</button>
           </div>
         </div>
       )}
@@ -660,7 +800,12 @@ export default function ShopScene({ onEndDay }: Props) {
             ))}
           </div>
 
-          <div style={{ fontSize: '22px', color: '#d84315', marginBottom: '8px', fontWeight: 'bold' }}>Chọn món để nấu</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <div style={{ fontSize: '22px', color: '#d84315', fontWeight: 'bold' }}>Chọn món để nấu</div>
+            <button onClick={() => setShowMicrowave(true)} style={{ background: '#00bcd4', color: '#fff', fontWeight: 'bold', padding: '5px 10px', borderRadius: '5px', border: '2px solid #000' }}>
+              ♨️ LÒ VI SÓNG ({Object.values(coldDishes).reduce((a,b)=>a+b,0)})
+            </button>
+          </div>
           <div style={{ background: '#fff', border: '3px solid #8d6e63', padding: '10px', borderRadius: '8px' }}>
             {RECIPES.map(recipe => {
               const isUnlocked = state.unlockedRecipes.includes(recipe.name);

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import RecipeModal from './RecipeModal';
+import TutorialScreen from './TutorialScreen';
 
 interface Props {
   onStart: () => void;
@@ -8,6 +9,7 @@ interface Props {
 
 export default function StartScreen({ onStart, onShowDisclaimer }: Props) {
   const [showRecipe, setShowRecipe] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   const resetProgress = () => {
     if (confirm('Bạn có chắc chắn muốn xóa toàn bộ tiến trình không?')) {
@@ -20,6 +22,7 @@ export default function StartScreen({ onStart, onShowDisclaimer }: Props) {
   return (
     <div className="portrait-container" style={{ alignItems: 'center', justifyContent: 'center', background: '#3e2723' }}>
       {showRecipe && <RecipeModal onClose={() => setShowRecipe(false)} />}
+      {showTutorial && <TutorialScreen onClose={() => setShowTutorial(false)} />}
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h1 style={{ color: '#ffb300', textShadow: '2px 2px 0 #000', fontSize: '48px', margin: '0' }}>TIỆM CÀRI</h1>
         <h1 style={{ color: '#ffb300', textShadow: '2px 2px 0 #000', fontSize: '48px', margin: '0' }}>CÔ LỘC LUCY</h1>
@@ -31,6 +34,7 @@ export default function StartScreen({ onStart, onShowDisclaimer }: Props) {
         <button className="start-btn btn-yellow" onClick={() => setShowRecipe(true)}>SỔ TAY CÔNG THỨC</button>
         <button className="start-btn btn-red" onClick={resetProgress}>XÓA TIẾN TRÌNH</button>
         <button className="start-btn btn-grey" onClick={onShowDisclaimer}>ĐỌC ĐIỀU LUẬT</button>
+        <button className="start-btn btn-blue" onClick={() => setShowTutorial(true)} style={{ background: '#2196f3', color: '#fff' }}>CÁCH CHƠI (TUTORIAL)</button>
       </div>
 
       <div style={{ position: 'absolute', bottom: '20px' }}>
