@@ -32,7 +32,9 @@ interface ChatMessage {
   type: 'pos' | 'neg' | 'neu';
 }
 
-export default function CariLive() {
+interface CariLiveProps { onClose: () => void; }
+
+export default function CariLive({ onClose }: CariLiveProps) {
   const { state } = useGameState();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const chatRef = useRef<HTMLDivElement>(null);
@@ -112,15 +114,24 @@ export default function CariLive() {
 
   return (
     <div style={{
-      width: '180px',
-      height: '100%',
-      background: '#212121',
-      borderLeft: '4px solid #000',
+      position: 'absolute',
+      top: '50px',
+      right: '10px',
+      width: '220px',
+      height: '350px',
+      background: 'rgba(33, 33, 33, 0.95)',
+      border: '4px solid #000',
+      borderRadius: '8px',
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      zIndex: 100,
+      boxShadow: '0 4px 10px rgba(0,0,0,0.5)'
     }}>
-      <div style={{ background: '#d32f2f', color: '#fff', padding: '5px', textAlign: 'center', fontWeight: 'bold', fontSize: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>
-        <span style={{ color: '#fff' }}>🔴</span> LIVE
+      <div style={{ background: '#d32f2f', color: '#fff', padding: '5px', textAlign: 'center', fontWeight: 'bold', fontSize: '18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+           <span style={{ color: '#fff', animation: 'pulse 1s infinite' }}>🔴</span> LIVE
+        </div>
+        <button onClick={onClose} style={{ background: 'transparent', border: 'none', color: '#fff', fontSize: '18px', cursor: 'pointer', fontWeight: 'bold' }}>X</button>
       </div>
       <div ref={chatRef} style={{ flex: 1, overflowY: 'auto', padding: '5px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {messages.map(msg => (

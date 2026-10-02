@@ -38,6 +38,7 @@ export default function ShopScene({ onEndDay }: Props) {
   const [isShopOpen, setIsShopOpen] = useState(false);
   const [hasSetPrice, setHasSetPrice] = useState(false);
   const [isOutside, setIsOutside] = useState(false);
+  const [showLive, setShowLive] = useState(false);
   const [currentEvent, setCurrentEvent] = useState<{type: string, message: string, onResolve: (choice: boolean) => void} | null>(null);
 
   // Cooking state
@@ -93,6 +94,7 @@ export default function ShopScene({ onEndDay }: Props) {
     if (!isShopOpen || currentEvent || isDelivering) return;
     
     const loop = setInterval(() => {
+      if (document.hidden) return;
       if (state.timeMinutes >= state.closingMinutes) {
         setIsShopOpen(false);
         const leftovers = Object.values(cookedDishes).reduce((a,b)=>a+b, 0) + Object.values(coldDishes).reduce((a,b)=>a+b, 0);
@@ -217,6 +219,7 @@ export default function ShopScene({ onEndDay }: Props) {
     let interval: any;
     if (isCooking && cookingProgress < 100) {
       interval = setInterval(() => {
+        if (document.hidden) return;
         setCookingProgress(p => {
           if (p + 10 >= 100) {
             setIsCooking(false);
@@ -379,7 +382,15 @@ export default function ShopScene({ onEndDay }: Props) {
   if (!hasSetPrice) return <PricingMenu onStartDay={() => { setHasSetPrice(true); setIsShopOpen(true); }} />;
 
   return (
-    <div className="portrait-container" style={{ display: 'flex', flexDirection: 'row', height: '100dvh', maxHeight: '100dvh', overflow: 'hidden', background: '#3e2723' }}>
+    <div className="portrait-container" style={{ display: 'flex', flexDirection: 'column', height: '100dvh', maxHeight: '100dvh', overflow: 'hidden', background: '#3e2723', position: 'relative' }}>
+      {showLive && <CariLive onClose={() => setShowLive(false)} />}
+      {!showLive && (
+        <button 
+          onClick={() => setShowLive(true)}
+          style={{ position: 'absolute', top: '70px', right: '10px', background: '#d32f2f', color: '#fff', border: '3px solid #000', padding: '5px 10px', fontWeight: 'bold', zIndex: 10, borderRadius: '5px' }}>
+          💬 LIVE CHAT
+        </button>
+      )}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
       {showRecipe && <RecipeModal onClose={() => setShowRecipe(false)} />}
       {showTutorial && <TutorialScreen onClose={() => setShowTutorial(false)} />}
@@ -847,7 +858,6 @@ export default function ShopScene({ onEndDay }: Props) {
         </div>
       </div>
       </div>
-      <CariLive />
     </div>
   );
 }
