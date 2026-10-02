@@ -384,14 +384,8 @@ export default function ShopScene({ onEndDay }: Props) {
   return (
     <div className="portrait-container" style={{ display: 'flex', flexDirection: 'column', height: '100dvh', maxHeight: '100dvh', overflow: 'hidden', background: '#3e2723', position: 'relative' }}>
       {showLive && <CariLive onClose={() => setShowLive(false)} />}
-      {!showLive && (
-        <button 
-          onClick={() => setShowLive(true)}
-          style={{ position: 'absolute', top: '70px', right: '10px', background: '#d32f2f', color: '#fff', border: '3px solid #000', padding: '5px 10px', fontWeight: 'bold', zIndex: 10, borderRadius: '5px' }}>
-          💬 LIVE CHAT
-        </button>
-      )}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
+
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', minHeight: 0 }}>
       {showRecipe && <RecipeModal onClose={() => setShowRecipe(false)} />}
       {showTutorial && <TutorialScreen onClose={() => setShowTutorial(false)} />}
       {toastMsg && (
