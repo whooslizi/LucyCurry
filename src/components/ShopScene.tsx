@@ -443,7 +443,7 @@ export default function ShopScene({ onEndDay }: Props) {
             <h2 style={{ fontSize: '24px', color: '#f57f17', textAlign: 'center', marginTop: 0 }}>♨️ LÒ VI SÓNG ♨️</h2>
             <p style={{ textAlign: 'center', fontWeight: 'bold' }}>Tối đa 2 món / lần quay. Phí điện: 10k</p>
             
-            <div style={{ background: '#fff', border: '3px solid #ccc', minHeight: '100px', padding: '10px', marginBottom: '15px' }}>
+            <div style={{ background: '#fff', border: '3px solid #ccc', minHeight: '100px', padding: '10px', marginBottom: '10px' }}>
               <div style={{ color: '#888', fontWeight: 'bold' }}>ĐỒ NGUỘI:</div>
               {Object.keys(coldDishes).map(k => coldDishes[k] > 0 && (
                 <div key={k} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', fontWeight: 'bold' }}>
@@ -461,7 +461,7 @@ export default function ShopScene({ onEndDay }: Props) {
               ))}
             </div>
 
-            <div style={{ background: '#e1f5fe', border: '3px solid #0288d1', minHeight: '100px', padding: '10px', marginBottom: '15px' }}>
+            <div style={{ background: '#e1f5fe', border: '3px solid #0288d1', minHeight: '100px', padding: '10px', marginBottom: '10px' }}>
               <div style={{ color: '#0288d1', fontWeight: 'bold' }}>ĐANG TRONG LÒ:</div>
               {Object.keys(microwaveItems).map(k => microwaveItems[k] > 0 && (
                 <div key={k} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px', fontWeight: 'bold' }}>
@@ -553,7 +553,7 @@ export default function ShopScene({ onEndDay }: Props) {
               {state.phoneOrders.map(order => {
                 const qStatus = quotingOrders[order.id];
                 return (
-                <div key={order.id} style={{ background: '#e3f2fd', color: '#000', padding: '15px', borderRadius: '15px', marginBottom: '15px', fontSize: '18px', boxShadow: '2px 2px 5px rgba(0,0,0,0.2)' }}>
+                <div key={order.id} style={{ background: '#e3f2fd', color: '#000', padding: '15px', borderRadius: '15px', marginBottom: '10px', fontSize: '18px', boxShadow: '2px 2px 5px rgba(0,0,0,0.2)' }}>
                   <strong>{order.customerName}:</strong>
                   <div style={{ marginTop: '5px' }}>Chị ơi cho em đơn:</div>
                   <ul style={{ margin: '10px 0', paddingLeft: '25px', fontWeight: 'bold', color: '#d84315' }}>
@@ -694,7 +694,7 @@ export default function ShopScene({ onEndDay }: Props) {
 
       {/* Top Scene: Cozy Kitchen */}
       <div style={{ 
-        minHeight: '340px', flexShrink: 0, background: 'linear-gradient(to bottom, #5d4037 0%, #3e2723 80%, #795548 80%, #5d4037 100%)', 
+        minHeight: '240px', flexShrink: 0, background: 'linear-gradient(to bottom, #5d4037 0%, #3e2723 80%, #795548 80%, #5d4037 100%)', 
         position: 'relative', overflow: 'hidden', borderBottom: '6px solid #1a0f0d'
       }}>
         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '80%', backgroundImage: 'url(/images/brick.svg)', opacity: 0.3 }}></div>
@@ -779,7 +779,7 @@ export default function ShopScene({ onEndDay }: Props) {
         <div style={{ flex: 1, overflowY: 'auto', padding: '10px' }}>
           
           <div style={{ fontSize: '18px', color: '#d84315', marginBottom: '8px', fontWeight: 'bold' }}>Kho nguyên liệu · Bấm để mua</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '15px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4px', marginBottom: '10px' }}>
              {INGREDIENTS.map(item => (
               <div key={item.name} onClick={() => { setBuyModalItem(item); setBuyModalQty(1); }} style={{ 
                 background: '#fff', border: '3px solid #8d6e63', padding: '5px', 
