@@ -365,7 +365,7 @@ export default function ShopScene({ onEndDay }: Props) {
       
       {buyModalItem && (
         <div className="modal-backdrop" style={{ zIndex: 110 }}>
-          <div className="modal-content" style={{ background: '#e0c097', border: '6px solid #8d6e63', textAlign: 'center', color: '#3e2723' }}>
+          <div className="modal-content" style={{ background: '#e0c097', border: '6px solid #8d6e63', textAlign: 'center', color: '#3e2723', width: '90%', maxWidth: '400px' }}>
             <h2 style={{ fontSize: '28px', color: '#d84315', marginTop: 0 }}>NHẬP SỈ: {buyModalItem.name.toUpperCase()}</h2>
             <img src={buyModalItem.img} style={{ width: '64px', height: '64px', imageRendering: 'pixelated', marginBottom: '10px' }} />
             <p style={{ fontSize: '20px', margin: 0 }}>Giá nhập: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(buyModalItem.price)} / phần</p>
@@ -404,52 +404,7 @@ export default function ShopScene({ onEndDay }: Props) {
         </div>
       )}
 
-      {toastMsg && (
-        <div style={{ position: 'absolute', top: '80px', left: '50%', transform: 'translateX(-50%)', background: 'rgba(0,0,0,0.8)', color: '#fff', padding: '10px 20px', borderRadius: '20px', fontSize: '18px', zIndex: 999, whiteSpace: 'nowrap' }}>
-          {toastMsg}
-        </div>
-      )}
       
-      {buyModalItem && (
-        <div className="modal-backdrop" style={{ zIndex: 110 }}>
-          <div className="modal-content" style={{ background: '#e0c097', border: '6px solid #8d6e63', textAlign: 'center', color: '#3e2723' }}>
-            <h2 style={{ fontSize: '28px', color: '#d84315', marginTop: 0 }}>NHẬP SỈ: {buyModalItem.name.toUpperCase()}</h2>
-            <img src={buyModalItem.img} style={{ width: '64px', height: '64px', imageRendering: 'pixelated', marginBottom: '10px' }} />
-            <p style={{ fontSize: '20px', margin: 0 }}>Giá nhập: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(buyModalItem.price)} / phần</p>
-            
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '20px 0' }}>
-              <button onClick={() => setBuyModalQty(Math.max(1, buyModalQty - 1))} style={{ background: '#e53935', fontSize: '32px', width: '60px', height: '60px', borderRadius: '10px', border: '4px solid #000', color: '#fff' }}>-</button>
-              <div style={{ fontSize: '36px', width: '80px', textAlign: 'center', fontWeight: 'bold' }}>{buyModalQty}</div>
-              <button onClick={() => setBuyModalQty(buyModalQty + 1)} style={{ background: '#4caf50', fontSize: '32px', width: '60px', height: '60px', borderRadius: '10px', border: '4px solid #000', color: '#fff' }}>+</button>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
-              <button onClick={() => setBuyModalQty(Math.max(1, buyModalQty - 5))} style={{ background: '#9e9e9e', fontSize: '18px', padding: '10px', color: '#fff', fontWeight: 'bold', border: '2px solid #000' }}>-5</button>
-              <button onClick={() => setBuyModalQty(buyModalQty + 5)} style={{ background: '#9e9e9e', fontSize: '18px', padding: '10px', color: '#fff', fontWeight: 'bold', border: '2px solid #000' }}>+5</button>
-              <button onClick={() => setBuyModalQty(buyModalQty + 10)} style={{ background: '#9e9e9e', fontSize: '18px', padding: '10px', color: '#fff', fontWeight: 'bold', border: '2px solid #000' }}>+10</button>
-            </div>
-            
-            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#d84315', marginBottom: '20px', background: '#fff', padding: '10px', border: '2px dashed #d84315' }}>
-              TỔNG CỘNG: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(buyModalItem.price * buyModalQty)}
-            </div>
-
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button onClick={() => {
-                if (state.money >= buyModalItem.price * buyModalQty) {
-                  playSound('cash');
-                  for(let i=0; i<buyModalQty; i++) {
-                    dispatch({ type: 'BUY_INGREDIENT', payload: { item: buyModalItem.name, cost: buyModalItem.price } });
-                  }
-                  setBuyModalItem(null);
-                } else {
-                  playSound('error');
-                  setCustomAlert('Không đủ tiền!');
-                }
-              }} style={{ flex: 1, background: '#4caf50', fontSize: '24px', padding: '15px', color: '#fff', border: '3px solid #000' }}>CHỐT SỈ</button>
-              <button onClick={() => setBuyModalItem(null)} style={{ flex: 1, background: '#757575', fontSize: '24px', padding: '15px', color: '#fff', border: '3px solid #000' }}>HỦY</button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {showMicrowave && (
         <div className="modal-backdrop" style={{ zIndex: 120 }}>
