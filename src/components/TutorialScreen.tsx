@@ -87,6 +87,7 @@ export default function TutorialScreen({ onClose }: Props) {
                 </p>
               </div>
             )}
+          </div>
 
           <div style={{ textAlign: 'center', color: '#5d4037', marginTop: '15px', fontSize: '24px', fontWeight: 'bold' }}>
             - Trang {page} / {totalPages} -
