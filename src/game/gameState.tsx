@@ -14,7 +14,8 @@ type Action =
   | { type: 'USE_INGREDIENTS'; payload: Record<string, number> }
   | { type: 'UNLOCK_RECIPE'; payload: { recipe: string; cost: number } }
   | { type: 'PAY_TAX'; payload: number }
-  | { type: 'NEXT_DAY' };
+  | { type: 'NEXT_DAY' }
+  | { type: 'SET_MENU_PRICE'; payload: { item: string, price: number } };
 
 const initialState: GameState = {
   playerName: '',
@@ -32,7 +33,8 @@ const initialState: GameState = {
   inventory: {
     'Cơm': 5, 'Udon': 2, 'Bò': 2, 'Gà': 3, 'Heo chiên': 0, 'Tôm chiên': 0, 'Khoai tây': 5, 'Cà rốt': 5
   },
-  unlockedRecipes: ['Cơm cà ri gà', 'Cơm cà ri bò']
+  unlockedRecipes: ['Cơm cà ri gà', 'Cơm cà ri bò'],
+  menuPrices: { 'Cơm cà ri gà': 35000, 'Cơm cà ri bò': 45000, 'Cơm cà ri heo': 40000, 'Cơm cà ri tôm': 55000 }
 };
 
 const gameReducer = (state: GameState, action: Action): GameState => {
@@ -104,6 +106,8 @@ const gameReducer = (state: GameState, action: Action): GameState => {
         profitToday: state.profitToday - action.payload.cost,
         unlockedRecipes: [...state.unlockedRecipes, action.payload.recipe]
       };
+    case 'SET_MENU_PRICE':
+      return { ...state, menuPrices: { ...state.menuPrices, [action.payload.item]: action.payload.price } };
     case 'NEXT_DAY':
       return {
         ...state,

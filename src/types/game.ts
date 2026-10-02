@@ -29,4 +29,5 @@ export interface GameState {
   
   inventory: Record<string, number>;
   unlockedRecipes: string[];
+  menuPrices: Record<string, number>;
 }

@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { useGameState } from '../game/gameState';
+import { useGameState } from '../game/gameState'
+import CariLive from './CariLive'
+import OutsideView from './OutsideView'
+import PricingMenu from './PricingMenu';
 import { Order } from '../types/game';
 import RecipeModal from './RecipeModal';
 import TutorialScreen from './TutorialScreen';
@@ -33,6 +36,8 @@ export default function ShopScene({ onEndDay }: Props) {
 
   // Shop status
   const [isShopOpen, setIsShopOpen] = useState(false);
+  const [hasSetPrice, setHasSetPrice] = useState(false);
+  const [isOutside, setIsOutside] = useState(false);
   const [currentEvent, setCurrentEvent] = useState<{type: string, message: string, onResolve: (choice: boolean) => void} | null>(null);
 
   // Cooking state
@@ -102,7 +107,16 @@ export default function ShopScene({ onEndDay }: Props) {
       dispatch({ type: 'ADVANCE_TIME', payload: 3 });
       
       // Random customer messages (Phone)
-      if (Math.random() < 0.1 && state.phoneOrders.length < 5) {
+      let orderChance = 0.1;
+      let totalNormal = 0; let totalCurrent = 0;
+      for (const p of Object.values(state.menuPrices)) { totalCurrent += p; totalNormal += 45000; }
+      if (totalNormal > 0) {
+         const ratio = totalCurrent / totalNormal;
+         if (ratio > 1.5) orderChance = 0.02; // Very expensive
+         else if (ratio < 0.8) orderChance = 0.25; // Very cheap
+      }
+
+      if (Math.random() < orderChance && state.phoneOrders.length < 5) {
         const id = Math.random().toString(36).substring(7, 11).toUpperCase();
         const availableTypes = RECIPES.filter(r => state.unlockedRecipes.includes(r.name));
         
@@ -118,7 +132,7 @@ export default function ShopScene({ onEndDay }: Props) {
           } else {
             items.push({ name: selectedRecipe.name, quantity: 1 });
           }
-          totalPrice += selectedRecipe.price;
+          totalPrice += state.menuPrices[selectedRecipe.name] || selectedRecipe.price;
         }
 
         dispatch({
@@ -361,8 +375,12 @@ export default function ShopScene({ onEndDay }: Props) {
     setDeliveringOrder(null);
   };
 
+  if (isOutside) return <OutsideView onBack={() => setIsOutside(false)} />;
+  if (!hasSetPrice) return <PricingMenu onStartDay={() => { setHasSetPrice(true); setIsShopOpen(true); }} />;
+
   return (
-    <div className="portrait-container" style={{ display: 'flex', flexDirection: 'column', height: '100dvh', maxHeight: '100dvh', overflow: 'hidden', background: '#3e2723' }}>
+    <div className="portrait-container" style={{ display: 'flex', flexDirection: 'row', height: '100dvh', maxHeight: '100dvh', overflow: 'hidden', background: '#3e2723' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
       {showRecipe && <RecipeModal onClose={() => setShowRecipe(false)} />}
       {showTutorial && <TutorialScreen onClose={() => setShowTutorial(false)} />}
       {toastMsg && (
@@ -828,6 +846,8 @@ export default function ShopScene({ onEndDay }: Props) {
           </button>
         </div>
       </div>
+      </div>
+      <CariLive />
     </div>
   );
 }
