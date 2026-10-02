@@ -20,6 +20,7 @@ export default function TutorialScreen({ onClose }: Props) {
       
       <div style={{ 
         width: '90%', 
+        maxWidth: '440px',
         height: '80%', 
         background: '#d7ccc8', 
         border: '6px solid #5d4037', 

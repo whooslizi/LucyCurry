@@ -528,7 +528,7 @@ export default function ShopScene({ onEndDay }: Props) {
 
       {customAlert && (
         <div className="modal-backdrop" style={{ zIndex: 9999 }}>
-          <div className="modal-content" style={{ background: '#f5e6cc', border: '6px solid #d32f2f', textAlign: 'center', color: '#3e2723', padding: '20px', maxWidth: '80%' }}>
+          <div className="modal-content" style={{ background: '#f5e6cc', border: '6px solid #d32f2f', textAlign: 'center', color: '#3e2723', padding: '20px', width: '90%', maxWidth: '400px' }}>
             <h2 style={{ fontSize: '32px', color: '#d32f2f', marginTop: 0 }}>THÔNG BÁO</h2>
             <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{customAlert}</p>
             <button onClick={() => setCustomAlert(null)} style={{ background: '#d32f2f', color: '#fff', fontSize: '24px', padding: '10px 30px', border: '3px solid #000', fontWeight: 'bold', marginTop: '15px' }}>ĐÓNG</button>
